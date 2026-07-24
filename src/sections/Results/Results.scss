@@ -1,0 +1,264 @@
+// =============================================================================
+// SECTION · Results (BEM) — carrusel 3D "coverflow" de apuestas ganadas
+// =============================================================================
+@use '@styles/abstracts' as *;
+
+@property --res-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.results {
+  padding-block: $space-2xl;
+
+  &__carousel {
+    position: relative;
+    margin-top: $space-xl;
+    user-select: none;
+  }
+
+  &__stage {
+    position: relative;
+    height: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1500px;
+    touch-action: pan-y;
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+
+    @include respond-to('md') {
+      height: 460px;
+    }
+  }
+
+  // -- Diapositiva (solo posición 3D) --
+  &__slide {
+    position: absolute;
+    width: 210px;
+    height: 330px;
+    margin: 0;
+    transform-style: preserve-3d;
+    transform: translateX(calc(var(--pos) * 84%)) translateZ(calc(var(--abs) * -200px))
+      rotateY(calc(var(--pos) * -34deg)) scale(calc(1 - var(--abs) * 0.13));
+    opacity: max(0.14, calc(1 - var(--abs) * 0.32));
+    transition:
+      transform 660ms cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 520ms ease;
+    will-change: transform, opacity;
+    cursor: pointer;
+
+    @include respond-to('md') {
+      width: 270px;
+      height: 420px;
+    }
+
+    // La activa salta hacia el usuario (efecto 4D).
+    &.is-active {
+      cursor: default;
+      transform: translateZ(90px) scale(1.06);
+    }
+  }
+
+  // -- Tarjeta (flota continuamente) --
+  &__card {
+    position: absolute;
+    inset: 0;
+    border-radius: $radius-lg;
+    overflow: hidden;
+    background: $color-surface;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: $shadow-lg;
+    animation: results-float 5.5s ease-in-out infinite;
+    animation-delay: calc(var(--i) * -0.9s);
+  }
+
+  &__slide.is-active &__card {
+    box-shadow:
+      $shadow-lg,
+      0 0 60px rgba(216, 180, 90, 0.28);
+
+    // Spotlight que sigue el cursor.
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: radial-gradient(
+        200px circle at var(--mx, 50%) var(--my, 50%),
+        rgba(216, 180, 90, 0.28),
+        transparent 55%
+      );
+      mix-blend-mode: screen;
+    }
+
+    // Borde con gradiente dorado que gira.
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      border-radius: inherit;
+      padding: 1.5px;
+      background: conic-gradient(
+        from var(--res-angle),
+        transparent 18%,
+        rgba(216, 180, 90, 0.85) 35%,
+        transparent 55%
+      );
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      animation: res-border 5s linear infinite;
+    }
+  }
+
+  &__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    -webkit-user-drag: none;
+  }
+
+  &__badge {
+    position: absolute;
+    top: $space-sm;
+    left: $space-sm;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: $radius-pill;
+    background: rgba(47, 158, 68, 0.92);
+    color: #fff;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  // -- Flechas --
+  &__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 15;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    color: $color-heading;
+    background: rgba(19, 19, 22, 0.72);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(216, 180, 90, 0.35);
+    transition:
+      background $transition-fast,
+      color $transition-fast,
+      transform $transition-fast;
+
+    &:hover {
+      color: $color-accent-ink;
+      background: linear-gradient(135deg, $color-primary-light, $color-primary-dark);
+    }
+
+    &:active {
+      transform: translateY(-50%) scale(0.92);
+    }
+
+    &--prev {
+      left: $space-sm;
+
+      @include respond-to('lg') {
+        left: 8%;
+      }
+    }
+
+    &--next {
+      right: $space-sm;
+
+      @include respond-to('lg') {
+        right: 8%;
+      }
+    }
+  }
+
+  // -- Puntos --
+  &__dots {
+    display: flex;
+    justify-content: center;
+    gap: $space-sm;
+    margin-top: $space-lg;
+  }
+
+  &__dot {
+    width: 9px;
+    height: 9px;
+    border-radius: $radius-pill;
+    background: $color-border;
+    transition:
+      width $transition-base,
+      background $transition-base;
+
+    &.is-active {
+      width: 28px;
+      background: linear-gradient(90deg, $color-primary-light, $color-primary-dark);
+    }
+  }
+
+  &__note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-top: $space-xl;
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+    text-align: center;
+
+    .icon {
+      flex-shrink: 0;
+      color: $color-primary;
+    }
+  }
+}
+
+@keyframes res-border {
+  to {
+    --res-angle: 360deg;
+  }
+}
+
+@keyframes results-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-0.5deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(0.5deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .results__slide {
+    transition: none;
+  }
+  .results__card {
+    animation: none;
+  }
+  .results__slide.is-active .results__card::after {
+    animation: none;
+  }
+}

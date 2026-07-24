@@ -24,21 +24,82 @@
     }
   }
 
+  &__brand-link {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-sm;
+    margin-bottom: $space-md;
+  }
+
   &__logo {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    // El logo es dorado sobre negro: "screen" elimina el fondo negro.
+    mix-blend-mode: screen;
+  }
+
+  &__brand-name {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $color-heading;
+  }
+
+  &__brand-accent {
+    background: linear-gradient(100deg, $color-primary-light, $color-primary 60%, $color-primary-dark);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  &__tagline {
+    max-width: 280px;
+    font-size: $font-size-sm;
+  }
+
+  // -- Redes sociales (siempre en una línea) --
+  &__socials {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.65rem;
+    margin-top: $space-lg;
+  }
+
+  &__social {
     display: grid;
     place-items: center;
     width: 40px;
     height: 40px;
-    border-radius: $radius-sm;
-    background: linear-gradient(135deg, $color-primary, $color-primary-dark);
-    color: $color-text-inverse;
-    font-weight: $font-weight-bold;
-    margin-bottom: $space-md;
-  }
+    flex-shrink: 0;
+    border-radius: 50%;
+    color: var(--brand);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid color-mix(in srgb, var(--brand) 35%, transparent);
+    transition:
+      color 200ms ease,
+      background 200ms ease,
+      border-color 200ms ease,
+      transform 200ms ease,
+      box-shadow 200ms ease;
 
-  &__tagline {
-    max-width: 260px;
-    font-size: $font-size-sm;
+    svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    &:hover {
+      color: #fff;
+      background: var(--brand);
+      border-color: transparent;
+      transform: translateY(-3px) scale(1.06);
+      box-shadow: 0 10px 24px color-mix(in srgb, var(--brand) 45%, transparent);
+    }
+
+    // Instagram: degradado de marca al pasar el cursor.
+    &--ig:hover {
+      background: linear-gradient(45deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+      box-shadow: 0 10px 24px rgba(214, 41, 118, 0.45);
+    }
   }
 
   &__column-title {

@@ -7,6 +7,8 @@
   --_bg: #{$color-primary};
   --_fg: #{$color-text-inverse};
 
+  position: relative;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -26,9 +28,15 @@
 
   @include focus-ring;
 
+  // El contenido por encima del destello.
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
   &:hover {
     filter: brightness(1.08);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
   }
 
   &:active {
@@ -37,15 +45,33 @@
 
   // -- Variantes --
   &--primary {
-    --_bg: #{$color-primary};
+    --_bg: linear-gradient(135deg, #{$color-primary-light}, #{$color-primary} 55%, #{$color-primary-dark});
     --_fg: #{$color-text-inverse};
-    box-shadow: $shadow-glow;
+    box-shadow: 0 6px 22px rgba(216, 180, 90, 0.35);
+    animation: button-glow 3s ease-in-out infinite;
   }
 
   &--accent {
-    --_bg: #{$color-accent};
+    --_bg: linear-gradient(135deg, #{$color-primary-light}, #{$color-accent} 55%, #{$color-accent-dark});
     --_fg: #{$color-accent-ink};
-    box-shadow: $shadow-md;
+    box-shadow: 0 6px 22px rgba(216, 180, 90, 0.35);
+    animation: button-glow 3s ease-in-out infinite;
+  }
+
+  // Destello dorado que cruza periódicamente (llama la atención).
+  &--primary::after,
+  &--accent::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -90%;
+    width: 55%;
+    height: 100%;
+    z-index: 0;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    transform: skewX(-20deg);
+    pointer-events: none;
+    animation: button-shine 4.5s ease-in-out infinite;
   }
 
   &--secondary {
@@ -72,5 +98,38 @@
   // -- Modificadores --
   &--full {
     width: 100%;
+  }
+}
+
+@keyframes button-glow {
+  0%,
+  100% {
+    box-shadow: 0 6px 22px rgba(216, 180, 90, 0.32);
+  }
+  50% {
+    box-shadow: 0 10px 32px rgba(216, 180, 90, 0.6);
+  }
+}
+
+@keyframes button-shine {
+  0% {
+    left: -90%;
+  }
+  // Cruza en el primer ~22% y luego descansa fuera de pantalla.
+  22%,
+  100% {
+    left: 200%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button--primary,
+  .button--accent {
+    animation: none;
+
+    &::after {
+      animation: none;
+      display: none;
+    }
   }
 }

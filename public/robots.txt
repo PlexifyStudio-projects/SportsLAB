@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://plexifystudio-projects.github.io/SportsLAB/sitemap.xml

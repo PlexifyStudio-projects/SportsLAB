@@ -1,53 +1,60 @@
 /**
- * Partidos de tenis en vivo. Datos de ejemplo (mock) que en producción
- * provendrían de `VITE_API_BASE_URL`. Las cuotas son ilustrativas.
+ * Partidos de tenis en vivo. Se generan 25 partidos aleatorios en cada carga
+ * (mock, sin backend). Sobre ellos corre la simulación de mercado (useLiveOdds).
  *
  * @typedef {Object} Match
  * @property {string} id
- * @property {string} tournament   Torneo / ronda
+ * @property {string} tournament   Torneo · ronda
  * @property {'clay'|'grass'|'hard'} surface
  * @property {string} home         Jugador/a local
  * @property {string} away         Jugador/a visitante
- * @property {string} status       Marcador o set en juego (etiqueta en vivo)
- * @property {{ home: number, away: number }} odds   Cuotas a 2 (tenis sin empate)
+ * @property {string} status       Set y marcador (etiqueta en vivo)
+ * @property {{ home: number, away: number }} odds
  */
 
-/** @type {Match[]} */
-export const LIVE_MATCHES = [
-  {
-    id: 'm1',
-    tournament: 'Roland Garros · 4ª ronda',
-    surface: 'clay',
-    home: 'C. Alcaraz',
-    away: 'J. Sinner',
-    status: 'Set 2 · 4-3',
-    odds: { home: 1.85, away: 1.95 },
-  },
-  {
-    id: 'm2',
-    tournament: 'Wimbledon · Cuartos',
-    surface: 'grass',
-    home: 'N. Djokovic',
-    away: 'A. Zverev',
-    status: 'Set 1 · 5-4',
-    odds: { home: 1.62, away: 2.3 },
-  },
-  {
-    id: 'm3',
-    tournament: 'US Open · 3ª ronda',
-    surface: 'hard',
-    home: 'D. Medvedev',
-    away: 'T. Fritz',
-    status: 'Set 3 · 2-1',
-    odds: { home: 1.78, away: 2.05 },
-  },
-  {
-    id: 'm4',
-    tournament: 'WTA Finals · Semis',
-    surface: 'hard',
-    home: 'I. Świątek',
-    away: 'A. Sabalenka',
-    status: 'Set 2 · 3-3',
-    odds: { home: 1.7, away: 2.1 },
-  },
+const PLAYERS = [
+  'C. Alcaraz', 'J. Sinner', 'N. Djokovic', 'A. Zverev', 'D. Medvedev', 'T. Fritz',
+  'S. Tsitsipas', 'C. Ruud', 'A. Rublev', 'H. Hurkacz', 'G. Dimitrov', 'F. Tiafoe',
+  'T. Paul', 'B. Shelton', 'K. Khachanov', 'F. Cerúndolo', 'M. Berrettini', 'U. Humbert',
+  'J. Rune', 'A. de Miñaur', 'I. Świątek', 'A. Sabalenka', 'C. Gauff', 'E. Rybakina',
+  'J. Pegula', 'O. Jabeur', 'M. Vondroušová', 'Q. Zheng', 'B. Krejčíková', 'D. Kasatkina',
 ];
+
+const TOURNAMENTS = [
+  'Roland Garros', 'Wimbledon', 'US Open', 'Australian Open', 'ATP Roma', 'ATP Madrid',
+  'ATP Miami', 'Masters Montecarlo', 'ATP Cincinnati', 'WTA Finals', 'ATP Finals', 'Copa Davis',
+];
+
+const ROUNDS = ['1ª ronda', '2ª ronda', '3ª ronda', 'Octavos', 'Cuartos', 'Semifinal', 'Final'];
+const SURFACES = ['clay', 'clay', 'grass', 'hard', 'hard', 'hard'];
+
+const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+const rand = (min, max) => min + Math.random() * (max - min);
+const round2 = (v) => Math.round(v * 100) / 100;
+const clampOdd = (v) => Math.min(4, Math.max(1.2, round2(v)));
+
+function makeMatch(i) {
+  const home = pick(PLAYERS);
+  let away = pick(PLAYERS);
+  while (away === home) away = pick(PLAYERS);
+
+  // Probabilidad del favorito → cuotas plausibles con margen de casa.
+  const p = rand(0.4, 0.68);
+  const margin = 0.95;
+
+  return {
+    id: `m${i}`,
+    tournament: `${pick(TOURNAMENTS)} · ${pick(ROUNDS)}`,
+    surface: pick(SURFACES),
+    home,
+    away,
+    status: `Set ${Math.ceil(rand(0.01, 3))} · ${Math.floor(rand(0, 6))}-${Math.floor(rand(0, 6))}`,
+    odds: {
+      home: clampOdd(1 / p / margin),
+      away: clampOdd(1 / (1 - p) / margin),
+    },
+  };
+}
+
+/** @type {Match[]} */
+export const LIVE_MATCHES = Array.from({ length: 25 }, (_, i) => makeMatch(i));

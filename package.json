@@ -18,6 +18,8 @@
     "format:check": "prettier --check \"src/**/*.{js,jsx,scss,css}\""
   },
   "dependencies": {
+    "@gsap/react": "^2.1.2",
+    "gsap": "^3.15.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },

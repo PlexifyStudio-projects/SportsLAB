@@ -123,6 +123,73 @@ export const ICON_PATHS = {
       <path d="M13 6l6 6-6 6" />
     </>
   ),
+  'arrow-left': (
+    <>
+      <path d="M19 12H5" />
+      <path d="M11 6l-6 6 6 6" />
+    </>
+  ),
+  search: (
+    <>
+      <circle cx="11" cy="11" r="7" />
+      <path d="M16.5 16.5 21 21" />
+    </>
+  ),
+  user: (
+    <>
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4.5 20a7.5 7.5 0 0 1 15 0" />
+    </>
+  ),
+  'chevron-down': <path d="M5 9l7 7 7-7" />,
+  menu: (
+    <>
+      <path d="M4 7h16" />
+      <path d="M4 12h16" />
+      <path d="M4 17h16" />
+    </>
+  ),
+  close: (
+    <>
+      <path d="M6 6l12 12" />
+      <path d="M18 6 6 18" />
+    </>
+  ),
+  diamond: (
+    <>
+      <path d="M6 3h12l3 5-9 13L3 8Z" />
+      <path d="M3 8h18" />
+      <path d="M9.5 3 8 8l4 13 4-13-1.5-5" />
+    </>
+  ),
+  gift: (
+    <>
+      <rect x="4" y="9" width="16" height="11" rx="1.5" />
+      <path d="M3 9h18" />
+      <path d="M12 9v11" />
+      <path d="M12 9C10 9 7.5 8.5 7.5 6.2 7.5 5 8.4 4 9.6 4 11.4 4 12 6.5 12 9Z" />
+      <path d="M12 9c2 0 4.5-.5 4.5-2.8C16.5 5 15.6 4 14.4 4 12.6 4 12 6.5 12 9Z" />
+    </>
+  ),
+  bell: (
+    <>
+      <path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z" />
+      <path d="M10.5 19a1.5 1.5 0 0 0 3 0" />
+    </>
+  ),
+  telegram: (
+    <>
+      <path d="M21.5 4.3 3 11.4c-.85.32-.83 1.55.03 1.84l4.6 1.53 1.78 5.2c.24.7 1.14.86 1.6.28l2.4-2.9 4.6 3.4c.58.43 1.42.12 1.55-.6l2.95-14.4c.16-.82-.66-1.5-1.6-1.45Z" />
+      <path d="M7.7 14.8 17 8.4l-6.3 7.6" />
+    </>
+  ),
+  target: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="12" r="5" />
+      <circle cx="12" cy="12" r="1.4" />
+    </>
+  ),
 };
 
 export const ICON_NAMES = Object.keys(ICON_PATHS);

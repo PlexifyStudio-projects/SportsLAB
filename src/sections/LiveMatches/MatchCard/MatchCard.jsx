@@ -1,27 +1,38 @@
-import Badge from '@components/ui/Badge/Badge.jsx';
 import OddsButton from '@components/ui/OddsButton/OddsButton.jsx';
 import './MatchCard.scss';
 
 const SURFACE_LABEL = { clay: 'Tierra', grass: 'Hierba', hard: 'Pista dura' };
 
+/** Spotlight que sigue el cursor. */
+function onCardMove(e) {
+  const card = e.currentTarget;
+  const r = card.getBoundingClientRect();
+  card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+  card.style.setProperty('--my', `${e.clientY - r.top}px`);
+}
+
 /**
- * MatchCard — Tarjeta de un partido de tenis en vivo con sus cuotas (a 2).
+ * MatchCard — Tarjeta premium de un partido de tenis en vivo (glass + spotlight).
  *
  * @param {Object} props
- * @param {import('@data/matches.js').Match} props.match
+ * @param {import('@data/matches.js').Match & { trend?: { home: string|null, away: string|null } }} props.match
  */
 export default function MatchCard({ match }) {
-  const { tournament, surface, home, away, status, odds } = match;
+  const { tournament, surface, home, away, status, odds, trend } = match;
 
   return (
-    <article className="match-card">
+    <article className="match-card" onMouseMove={onCardMove}>
       <header className="match-card__head">
         <span className="match-card__tournament">{tournament}</span>
-        <Badge variant="live">EN VIVO</Badge>
+        <span className="match-card__live">
+          <span className="match-card__live-dot" aria-hidden="true" />
+          En vivo
+        </span>
       </header>
 
       <div className="match-card__players">
         <span className="match-card__player">{home}</span>
+        <span className="match-card__vs">vs</span>
         <span className="match-card__player">{away}</span>
       </div>
 
@@ -33,8 +44,8 @@ export default function MatchCard({ match }) {
       </div>
 
       <div className="match-card__odds">
-        <OddsButton label="1" value={odds.home} />
-        <OddsButton label="2" value={odds.away} />
+        <OddsButton label="1" value={odds.home} trend={trend?.home} />
+        <OddsButton label="2" value={odds.away} trend={trend?.away} />
       </div>
     </article>
   );

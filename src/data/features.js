@@ -1,5 +1,5 @@
 /**
- * Ventajas competitivas mostradas en la sección "Por qué SportsLAB".
+ * Ventajas de SportsLAB mostradas en la sección "¿Por qué SportsLAB?".
  * `icon` es una clave del registro de iconos SVG (ver components/ui/Icon).
  * @type {{ id: string, icon: string, title: string, description: string }[]}
  */
@@ -7,25 +7,25 @@ export const FEATURES = [
   {
     id: 'odds',
     icon: 'chart',
-    title: 'Las mejores cuotas',
-    description: 'Cuotas competitivas actualizadas al segundo en cada torneo ATP y WTA.',
+    title: 'Mejores cuotas',
+    description: 'Comparamos y elegimos siempre la cuota más alta del mercado.',
   },
   {
     id: 'live',
-    icon: 'live',
-    title: 'Directo punto a punto',
-    description: 'Apuesta en vivo game a game con estadísticas de saque, roturas y ritmo.',
+    icon: 'target',
+    title: 'Punto a punto',
+    description: 'Seguimiento en vivo de cada partido, game a game.',
   },
   {
     id: 'payout',
     icon: 'lightning',
-    title: 'Retiros en minutos',
-    description: 'Cobra tus ganancias al instante con pagos seguros y sin comisiones ocultas.',
+    title: 'Retiro rápido',
+    description: 'Gestión de bankroll clara para que cobres tus ganancias sin líos.',
   },
   {
     id: 'secure',
     icon: 'shield',
-    title: 'Seguridad garantizada',
-    description: 'Operador con licencia y cifrado de extremo a extremo para tus datos.',
+    title: 'Seguridad',
+    description: 'Análisis con datos reales y total transparencia en los resultados.',
   },
 ];

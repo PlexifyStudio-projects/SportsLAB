@@ -4,6 +4,7 @@
 @use '@styles/abstracts' as *;
 
 .odds-button {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,20 +12,23 @@
   flex: 1;
   min-width: 0;
   padding: $space-sm;
-  border-radius: $radius-sm;
-  background: $color-surface-2;
+  overflow: hidden;
+  border-radius: $radius-md;
+  background: rgba(255, 255, 255, 0.03);
   border: 1px solid $color-border;
   transition:
     border-color $transition-fast,
     background $transition-fast,
-    transform $transition-fast;
+    transform $transition-fast,
+    box-shadow $transition-fast;
 
   @include focus-ring;
 
   &:hover {
     border-color: $color-primary;
     background: rgba(216, 180, 90, 0.14);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(216, 180, 90, 0.22);
   }
 
   &__label {
@@ -34,8 +38,53 @@
   }
 
   &__value {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
     font-weight: $font-weight-bold;
     color: $color-primary-light;
     font-variant-numeric: tabular-nums;
+  }
+
+  &__arrow {
+    font-size: 0.55rem;
+    line-height: 1;
+  }
+
+  // -- Tendencia (destello al cambiar la cuota) --
+  &--up {
+    border-color: rgba(76, 175, 114, 0.5);
+    animation: odds-flash-up 0.7s ease;
+
+    .odds-button__value {
+      color: #5fd08a;
+    }
+  }
+
+  &--down {
+    border-color: rgba(217, 58, 58, 0.5);
+    animation: odds-flash-down 0.7s ease;
+
+    .odds-button__value {
+      color: #e2695f;
+    }
+  }
+}
+
+@keyframes odds-flash-up {
+  0% {
+    background: rgba(76, 175, 114, 0.28);
+  }
+  100% {
+    background: rgba(255, 255, 255, 0.03);
+  }
+}
+
+@keyframes odds-flash-down {
+  0% {
+    background: rgba(217, 58, 58, 0.28);
+  }
+  100% {
+    background: rgba(255, 255, 255, 0.03);
   }
 }

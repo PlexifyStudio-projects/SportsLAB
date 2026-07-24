@@ -1,5 +1,5 @@
 // =============================================================================
-// COMPONENT · Header  (BEM)
+// COMPONENT · Header (BEM) — cabecera "luxury" interactiva
 // =============================================================================
 @use '@styles/abstracts' as *;
 
@@ -7,120 +7,467 @@
   position: sticky;
   top: 0;
   z-index: $z-header;
-  height: $header-height;
-  display: flex;
-  align-items: center;
-  background: rgba(10, 10, 11, 0.68);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid transparent;
-  transition:
-    border-color $transition-base,
-    background $transition-base,
-    box-shadow $transition-base;
 
-  &--scrolled {
-    border-bottom-color: $color-border;
-    background: rgba(10, 10, 11, 0.9);
-    box-shadow: $shadow-sm;
+  // ---------------------------------------------------------------------------
+  // Barra principal
+  // ---------------------------------------------------------------------------
+  &__bar {
+    position: relative;
+    background:
+      radial-gradient(120% 180% at 50% -60%, rgba(216, 180, 90, 0.14), transparent 60%),
+      linear-gradient(180deg, rgba(216, 180, 90, 0.05), rgba(10, 10, 11, 0.62) 70%);
+    backdrop-filter: blur(16px) saturate(1.4);
+    transition:
+      background 350ms ease,
+      box-shadow 350ms ease;
+
+    // Hairline dorado siempre visible (da vida y define el borde inferior).
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(216, 180, 90, 0.55) 50%, transparent);
+    }
   }
 
   &__inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: $space-lg;
+    gap: $space-md;
+    height: $header-height;
+    transition: height 350ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
+  // -- Marca / logo --
   &__brand {
     display: flex;
     align-items: center;
     gap: $space-sm;
-    font-weight: $font-weight-bold;
-    font-size: $font-size-lg;
-    color: $color-heading;
+    flex-shrink: 0;
   }
 
   &__logo {
+    position: relative;
     display: grid;
     place-items: center;
-    width: 36px;
-    height: 36px;
-    border-radius: $radius-sm;
-    background: linear-gradient(135deg, $color-primary, $color-primary-dark);
-    color: $color-text-inverse;
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    border-radius: $radius-md;
+    background: radial-gradient(circle at 50% 38%, rgba(216, 180, 90, 0.35), transparent 72%);
+    box-shadow: 0 0 22px rgba(216, 180, 90, 0.22);
+    transition:
+      width 350ms ease,
+      height 350ms ease;
+  }
+
+  &__logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    // El logo es dorado sobre negro: "screen" elimina el negro y deja el oro.
+    mix-blend-mode: screen;
+  }
+
+  &__wordmark {
+    font-size: $font-size-xl;
     font-weight: $font-weight-bold;
-    font-size: $font-size-sm;
-  }
+    letter-spacing: -0.01em;
+    color: $color-heading;
 
-  // -- Navegación --
-  &__nav-list {
-    display: flex;
-    align-items: center;
-    gap: $space-lg;
-  }
-
-  &__nav-link {
-    color: $color-text-muted;
-    font-weight: $font-weight-medium;
-    transition: color $transition-fast;
-
-    &:hover {
-      color: $color-text;
+    @media (max-width: 380px) {
+      display: none;
     }
   }
 
+  &__wordmark-accent {
+    background: linear-gradient(100deg, $color-primary-light, $color-primary 60%, $color-primary-dark);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  // -- Navegación --
+  &__nav {
+    display: none;
+
+    @include respond-to('lg') {
+      display: block;
+    }
+  }
+
+  &__nav-list {
+    display: flex;
+    align-items: center;
+    gap: $space-xs;
+  }
+
+  &__nav-item {
+    position: relative;
+  }
+
+  &__nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: $space-sm 0.75rem;
+    border-radius: $radius-pill;
+    font-weight: $font-weight-medium;
+    white-space: nowrap; // Cada ítem en una sola línea (sin doble línea).
+    color: $color-text;
+    border: 1px solid transparent;
+    transition:
+      color $transition-fast,
+      background $transition-fast,
+      border-color $transition-fast;
+
+    .icon {
+      color: $color-primary-light;
+      transition: transform $transition-fast;
+    }
+
+    &:hover {
+      color: #fff;
+      background: rgba(216, 180, 90, 0.12);
+      border-color: rgba(216, 180, 90, 0.35);
+
+      .icon {
+        transform: translateY(-1px) scale(1.12);
+      }
+    }
+  }
+
+  // El panel "Cómo funciona" se movió a su propia sección (sections/HowItWorks).
+
+  // ---------------------------------------------------------------------------
+  // Acciones (derecha)
+  // ---------------------------------------------------------------------------
   &__actions {
     display: flex;
     align-items: center;
     gap: $space-sm;
+    flex-shrink: 0;
   }
 
-  &__login {
+  // -- Selector de idioma (desplegable) --
+  &__lang-wrap {
+    position: relative;
     display: none;
 
-    @include respond-to('md') {
-      display: inline-flex;
+    @include respond-to('lg') {
+      display: flex;
+      align-items: center;
     }
   }
 
-  // -- Menú hamburguesa (móvil) --
-  &__burger {
+  &__lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    height: 44px;
+    padding-inline: $space-sm;
+    border-radius: $radius-pill;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text;
+    border: 1px solid $color-border;
+    transition:
+      border-color $transition-fast,
+      color $transition-fast,
+      background $transition-fast;
+
+    .icon {
+      color: $color-primary;
+    }
+
+    &:hover {
+      border-color: rgba(216, 180, 90, 0.5);
+      background: rgba(216, 180, 90, 0.06);
+    }
+  }
+
+  &__lang-caret {
+    transition: transform $transition-fast;
+  }
+
+  &__lang[aria-expanded='true'] &__lang-caret {
+    transform: rotate(180deg);
+  }
+
+  &__lang-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 170px;
+    padding: $space-xs;
+    border-radius: $radius-md;
+    background: linear-gradient(180deg, rgba(28, 28, 33, 0.98), rgba(16, 16, 19, 0.98));
+    border: 1px solid rgba(216, 180, 90, 0.3);
+    box-shadow: $shadow-lg;
+    animation: lang-in 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  &__lang-option {
     display: flex;
-    flex-direction: column;
-    gap: 5px;
+    align-items: center;
+    gap: $space-sm;
+    width: 100%;
     padding: $space-sm;
+    border-radius: $radius-sm;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-muted;
+    transition:
+      background $transition-fast,
+      color $transition-fast;
+
+    &:hover {
+      background: $color-surface-2;
+      color: $color-heading;
+    }
+
+    &.is-active {
+      color: $color-primary;
+    }
+  }
+
+  &__lang-code {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 22px;
+    flex-shrink: 0;
+    border-radius: $radius-sm;
+    background: rgba(216, 180, 90, 0.14);
+    border: 1px solid rgba(216, 180, 90, 0.3);
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+  }
+
+  // -- CTA con destello (Telegram) --
+  &__cta {
+    position: relative;
+    align-self: center;
+    display: none; // En móvil el CTA va en el menú y en la barra inferior.
+    align-items: center;
+    gap: 0.5rem;
+    height: 44px;
+
+    @include respond-to('lg') {
+      display: inline-flex;
+    }
+    padding-inline: $space-lg;
+    overflow: hidden;
+    border-radius: $radius-pill;
+    font-weight: $font-weight-bold;
+    line-height: 1;
+    color: $color-accent-ink;
+    background: linear-gradient(135deg, $color-primary-light, $color-primary 55%, $color-primary-dark);
+    box-shadow: 0 2px 14px rgba(216, 180, 90, 0.35);
+    white-space: nowrap;
+    transition:
+      transform $transition-base,
+      box-shadow $transition-base,
+      filter $transition-base;
+
+    @include focus-ring;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, $color-primary, $color-primary-light);
+      opacity: 0;
+      transition: opacity $transition-base;
+    }
+
+    // Hover suave y elegante: leve elevación + brillo, sin sacudidas.
+    &:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+      box-shadow: 0 8px 22px rgba(216, 180, 90, 0.45);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  &__cta-icon,
+  &__cta-label {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__cta-shine {
+    position: absolute;
+    top: 0;
+    left: -80%;
+    width: 55%;
+    height: 100%;
+    z-index: 1;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    transform: skewX(-20deg);
+    transition: left 750ms cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+  }
+
+  &__cta:hover &__cta-shine {
+    left: 140%;
+  }
+
+  &__cta:hover::before {
+    opacity: 1;
+  }
+
+  // -- Botón hamburguesa --
+  &__burger {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: $radius-md;
+    color: $color-heading;
 
     @include respond-to('lg') {
       display: none;
     }
-  }
 
-  &__burger-bar {
-    width: 22px;
-    height: 2px;
-    background: $color-text;
-    border-radius: 2px;
-  }
-
-  // -- Comportamiento responsive de la navegación --
-  &__nav {
-    @media (max-width: (breakpoint('lg') - 1px)) {
-      position: absolute;
-      inset: $header-height 0 auto 0;
-      display: none;
-      padding: $space-md;
-      background: $color-surface;
-      border-bottom: 1px solid $color-border;
-
-      &--open {
-        display: block;
-      }
-
-      .header__nav-list {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: $space-md;
-      }
+    &:hover {
+      color: $color-primary;
     }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Estado: con scroll
+  // ---------------------------------------------------------------------------
+  &--scrolled {
+    .header__bar {
+      background:
+        radial-gradient(120% 180% at 50% -60%, rgba(216, 180, 90, 0.12), transparent 60%),
+        rgba(9, 9, 10, 0.92);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .header__inner {
+      height: 60px;
+    }
+
+    .header__logo {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Menú móvil
+  // ---------------------------------------------------------------------------
+  // -- Dropdown compacto (baja del header) --
+  &__mobile {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: $space-sm;
+    background:
+      radial-gradient(500px 300px at 100% 0%, rgba(216, 180, 90, 0.1), transparent 60%),
+      rgba(8, 8, 10, 0.98);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(216, 180, 90, 0.25);
+    box-shadow: 0 24px 40px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-12px);
+    transition:
+      opacity 250ms ease,
+      transform 340ms cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 250ms ease;
+
+    @include respond-to('lg') {
+      display: none;
+    }
+
+    &.is-open {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+  }
+
+  &__mobile-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__mobile-link {
+    display: flex;
+    align-items: center;
+    gap: $space-md;
+    padding: $space-md $space-sm;
+    border-radius: $radius-md;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-heading;
+    transition:
+      background $transition-fast,
+      color $transition-fast;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid $color-border;
+    }
+
+    .icon:first-child {
+      color: $color-primary;
+    }
+
+    &:hover,
+    &:active {
+      background: $color-surface-2;
+      color: $color-primary;
+    }
+  }
+
+  &__mobile-caret {
+    margin-left: auto;
+    color: $color-text-muted;
+  }
+
+  &__mobile-actions {
+    padding: $space-sm $space-sm 0;
+  }
+
+  &__mobile-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: $space-md;
+    border-radius: $radius-md;
+    font-weight: $font-weight-bold;
+    color: $color-accent-ink;
+    background: linear-gradient(135deg, $color-primary-light, $color-primary 55%, $color-primary-dark);
+    box-shadow: $shadow-glow;
+  }
+}
+
+@keyframes lang-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header,
+  .header__cta-shine {
+    animation: none !important;
+    transition: none !important;
   }
 }

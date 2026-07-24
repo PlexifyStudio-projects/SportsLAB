@@ -1,24 +1,46 @@
 // =============================================================================
-// SECTION · Lifestyle  (BEM) — collage editorial negro/oro
+// SECTION · Lifestyle  (BEM) — bento editorial negro/oro con tilt + spotlight
 // =============================================================================
 @use '@styles/abstracts' as *;
 
 .lifestyle {
+  position: relative;
   padding-block: $space-2xl;
 
+  // -- Glows dorados de ambiente --
+  &__glow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(52% 46% at 88% 2%, rgba(216, 180, 90, 0.1), transparent 60%),
+      radial-gradient(46% 40% at 2% 98%, rgba(216, 180, 90, 0.07), transparent 60%);
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Bento
+  // ---------------------------------------------------------------------------
   &__collage {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: 150px;
-    gap: $space-md;
+    grid-auto-rows: 148px;
+    gap: $space-sm;
+    margin-top: $space-xl;
 
     @include respond-to('sm') {
-      grid-auto-rows: 180px;
+      grid-auto-rows: 178px;
+      gap: $space-md;
     }
 
     @include respond-to('lg') {
       grid-template-columns: repeat(4, 1fr);
-      grid-auto-rows: 200px;
+      grid-auto-rows: 212px;
     }
   }
 
@@ -29,81 +51,211 @@
     border-radius: $radius-lg;
     border: 1px solid $color-border;
     background: $color-surface;
+    box-shadow: $shadow-md;
+    perspective: 900px;
+    transition:
+      border-color $transition-base,
+      box-shadow $transition-base;
 
-    // Ocupa 2 columnas y 2 filas: la foto protagonista.
+    &:hover {
+      border-color: rgba(216, 180, 90, 0.5);
+      box-shadow: $shadow-lg;
+    }
+
+    // Foto protagonista: 2×2.
     &--feature {
       grid-column: span 2;
       grid-row: span 2;
-      border-color: $color-accent-dark;
-      box-shadow: $shadow-glow;
+      border-color: rgba(216, 180, 90, 0.45);
+      box-shadow:
+        $shadow-glow,
+        $shadow-lg;
     }
+  }
+
+  // Capa que se inclina en 3D (separada del revelado GSAP de la figura).
+  &__media {
+    position: absolute;
+    inset: 0;
+    transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transform-style: preserve-3d;
+    transition: transform 260ms ease;
 
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      filter: grayscale(0.15) contrast(1.05);
+      // Escala base: evita huecos en las esquinas al inclinar.
+      transform: scale(1.05);
+      filter: grayscale(0.18) contrast(1.05);
       transition:
-        transform 600ms cubic-bezier(0.16, 1, 0.3, 1),
+        transform 640ms cubic-bezier(0.16, 1, 0.3, 1),
         filter $transition-base;
     }
 
-    // Veladura oscura + brillo dorado superior para cohesión cromática.
+    // Veladura inferior + brillo dorado superior + spotlight que sigue el cursor.
     &::after {
       content: '';
       position: absolute;
       inset: 0;
-      background:
-        linear-gradient(180deg, transparent 45%, rgba(10, 10, 11, 0.82) 100%),
-        radial-gradient(120% 80% at 100% 0%, rgba(216, 180, 90, 0.18), transparent 55%);
       pointer-events: none;
-    }
-
-    &:hover img {
-      transform: scale(1.06);
-      filter: grayscale(0) contrast(1.08);
+      background:
+        radial-gradient(
+          220px circle at var(--mx, 50%) var(--my, 50%),
+          rgba(216, 180, 90, 0.22),
+          transparent 55%
+        ),
+        linear-gradient(180deg, transparent 42%, rgba(10, 10, 11, 0.86) 100%),
+        radial-gradient(120% 80% at 100% 0%, rgba(216, 180, 90, 0.14), transparent 55%);
     }
   }
 
+  &__figure:hover &__media img {
+    transform: scale(1.12);
+    filter: grayscale(0) contrast(1.08);
+  }
+
+  // Encuadre de la foto protagonista (sesga hacia arriba para no cortar el rostro).
+  &__figure--feature &__media img {
+    object-position: 50% 28%;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Captions
+  // ---------------------------------------------------------------------------
   &__caption {
     position: absolute;
-    left: $space-lg;
-    bottom: $space-lg;
-    z-index: 1;
+    inset: auto 0 0 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: $space-sm;
+    padding: $space-md;
+    opacity: 0.94;
+    transform: translateY(6px);
+    transition:
+      transform $transition-base,
+      opacity $transition-base;
+
+    &--feature {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $space-sm;
+      padding: $space-lg;
+    }
+  }
+
+  &__figure:hover &__caption {
+    opacity: 1;
+    transform: none;
+  }
+
+  &__caption-icon {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    border-radius: $radius-sm;
+    background: rgba(216, 180, 90, 0.18);
+    border: 1px solid rgba(216, 180, 90, 0.4);
+    color: $color-primary;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  }
+
+  &__caption-body {
     display: flex;
     flex-direction: column;
+    min-width: 0;
+  }
+
+  &__caption-label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    line-height: 1.2;
+    color: $color-heading;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__caption-sub {
+    font-size: $font-size-xs;
+    color: $color-primary-light;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // -- Etiqueta / pill de la foto protagonista --
+  &__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.28rem 0.75rem;
+    border-radius: $radius-pill;
+    background: rgba(19, 19, 22, 0.55);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(216, 180, 90, 0.45);
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: $color-primary-light;
+  }
+
+  &__tag-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: $color-primary;
+    box-shadow: 0 0 0 0 rgba(216, 180, 90, 0.6);
+    animation: lifestyle-pulse 2s ease-out infinite;
   }
 
   &__caption-name {
-    font-size: $font-size-xl;
+    font-size: clamp(1.5rem, 4vw, $font-size-2xl);
     font-weight: $font-weight-bold;
+    line-height: 1.05;
     color: $color-heading;
-    line-height: 1.1;
   }
 
-  &__caption-role {
-    font-size: $font-size-sm;
-    font-weight: $font-weight-semibold;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: $color-primary;
-  }
-
-  // -- Cita --
+  // ---------------------------------------------------------------------------
+  // Cita
+  // ---------------------------------------------------------------------------
   &__quote {
-    max-width: 760px;
+    position: relative;
+    max-width: 780px;
     margin: $space-2xl auto 0;
     padding: $space-xl;
     text-align: center;
     border-radius: $radius-lg;
     border: 1px solid $color-border;
     background:
-      radial-gradient(500px 200px at 50% 0%, rgba(216, 180, 90, 0.12), transparent 60%),
+      radial-gradient(600px 220px at 50% 0%, rgba(216, 180, 90, 0.12), transparent 62%),
       $color-surface;
+    overflow: hidden;
+
+    @include respond-to('md') {
+      padding: $space-2xl;
+    }
+  }
+
+  &__quote-mark {
+    position: absolute;
+    top: -0.18em;
+    left: $space-md;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 6rem;
+    line-height: 1;
+    color: rgba(216, 180, 90, 0.16);
+    pointer-events: none;
+    user-select: none;
   }
 
   &__quote-text {
-    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    position: relative;
+    font-size: clamp(1.2rem, 3vw, 1.7rem);
     font-weight: $font-weight-medium;
     line-height: 1.4;
     color: $color-heading;
@@ -115,5 +267,26 @@
     font-style: normal;
     font-weight: $font-weight-semibold;
     color: $color-primary;
+  }
+}
+
+@keyframes lifestyle-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(216, 180, 90, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 7px rgba(216, 180, 90, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(216, 180, 90, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lifestyle__tag-dot {
+    animation: none;
+  }
+  .lifestyle__media {
+    transition: none;
   }
 }

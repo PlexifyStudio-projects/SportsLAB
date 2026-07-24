@@ -3,11 +3,42 @@
 // =============================================================================
 @use '../abstracts' as *;
 
+html {
+  // `clip` evita el desborde horizontal SIN romper el position:sticky del header
+  // (a diferencia de `hidden`, que crea un contenedor de scroll).
+  overflow-x: clip;
+  // Scrollbar temática (Firefox).
+  scrollbar-width: thin;
+  scrollbar-color: $color-primary-dark rgba(255, 255, 255, 0.04);
+}
+
 body {
+  overflow-x: clip;
   background:
     radial-gradient(1100px 560px at 82% -14%, rgba(216, 180, 90, 0.18), transparent 62%),
     radial-gradient(760px 480px at -8% 4%, rgba(216, 180, 90, 0.06), transparent 55%), $color-bg;
   background-attachment: fixed;
+}
+
+// Scrollbar temática (Chromium / WebKit).
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: $radius-pill;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  background-color: $color-primary-dark;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: $color-primary;
 }
 
 // Contenedor reutilizable como clase utilitaria.

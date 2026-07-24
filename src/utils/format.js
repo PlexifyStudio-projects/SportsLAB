@@ -13,5 +13,5 @@ export function formatOdd(value) {
  * @returns {string}
  */
 export function formatCount(value) {
-  return new Intl.NumberFormat('es-ES').format(value);
+  return new Intl.NumberFormat('es-CO').format(value);
 }

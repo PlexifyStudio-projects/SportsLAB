@@ -1,28 +1,57 @@
 // =============================================================================
-// COMPONENT · MatchCard  (BEM)
+// COMPONENT · MatchCard  (BEM) — tarjeta premium (glass + spotlight)
 // =============================================================================
 @use '@styles/abstracts' as *;
 
 .match-card {
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: $space-md;
   height: 100%;
   padding: $space-lg;
   border-radius: $radius-lg;
-  background: $color-surface;
-  border: 1px solid $color-border;
+  background: linear-gradient(160deg, $color-surface-2, $color-surface);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
   transition:
-    border-color $transition-base,
     transform $transition-base,
+    border-color $transition-base,
     box-shadow $transition-base;
 
-  &:hover {
-    border-color: $color-accent-dark;
-    transform: translateY(-3px);
-    box-shadow: $shadow-md;
+  > * {
+    position: relative;
+    z-index: 1;
   }
 
+  // Spotlight que sigue el cursor.
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      240px circle at var(--mx, 50%) var(--my, 0%),
+      rgba(216, 180, 90, 0.16),
+      transparent 55%
+    );
+    opacity: 0;
+    transition: opacity 300ms ease;
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+    border-color: rgba(216, 180, 90, 0.4);
+    box-shadow: $shadow-lg;
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  // -- Cabecera --
   &__head {
     display: flex;
     align-items: center;
@@ -35,18 +64,48 @@
     color: $color-text-muted;
   }
 
+  &__live {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-shrink: 0;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: $color-danger;
+  }
+
+  &__live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: $color-danger;
+    box-shadow: 0 0 0 0 rgba(217, 58, 58, 0.6);
+    animation: match-pulse 1.6s ease-out infinite;
+  }
+
+  // -- Jugadores --
   &__players {
     display: flex;
     flex-direction: column;
-    gap: $space-xs;
+    gap: 0.15rem;
   }
 
   &__player {
-    font-weight: $font-weight-semibold;
+    font-weight: $font-weight-bold;
     font-size: $font-size-lg;
     color: $color-heading;
   }
 
+  &__vs {
+    font-size: $font-size-xs;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: $color-text-muted;
+  }
+
+  // -- Estado --
   &__status {
     display: flex;
     align-items: center;
@@ -64,12 +123,10 @@
       background: rgba(207, 91, 56, 0.18);
       color: #e08a6d;
     }
-
     &--grass {
       background: rgba(76, 175, 114, 0.16);
       color: #6fce97;
     }
-
     &--hard {
       background: rgba(90, 140, 216, 0.16);
       color: #86aef0;
@@ -86,5 +143,23 @@
     display: flex;
     gap: $space-sm;
     margin-top: auto;
+  }
+}
+
+@keyframes match-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(217, 58, 58, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(217, 58, 58, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(217, 58, 58, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .match-card__live-dot {
+    animation: none;
   }
 }

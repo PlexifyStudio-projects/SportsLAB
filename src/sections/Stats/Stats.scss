@@ -1,0 +1,221 @@
+// =============================================================================
+// SECTION · Stats (BEM) — bento grid premium (glass + spotlight + borde animado)
+// =============================================================================
+@use '@styles/abstracts' as *;
+
+// Propiedad personalizada animable para el borde con gradiente giratorio.
+@property --stats-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.stats {
+  padding-block: $space-2xl;
+
+  // -- Bento grid --
+  &__bento {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-md;
+
+    @include respond-to('sm') {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include respond-to('lg') {
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(2, minmax(158px, 1fr));
+    }
+  }
+
+  // -- Celda base (glassmorphism) --
+  &__cell {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: $space-sm;
+    padding: $space-lg;
+    border-radius: $radius-lg;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition:
+      transform $transition-base,
+      border-color $transition-base;
+
+    // Contenido por encima del "spotlight".
+    > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    // Spotlight dorado que sigue el cursor.
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: radial-gradient(
+        260px circle at var(--mx, 50%) var(--my, 50%),
+        rgba(216, 180, 90, 0.16),
+        transparent 55%
+      );
+      opacity: 0;
+      transition: opacity 300ms ease;
+    }
+
+    &:hover {
+      transform: translateY(-3px);
+      border-color: rgba(216, 180, 90, 0.32);
+
+      &::before {
+        opacity: 1;
+      }
+    }
+
+    // -- Celda destacada (2x2 en desktop) con borde animado --
+    &--feature {
+      gap: $space-md;
+      justify-content: center;
+      background:
+        radial-gradient(420px 260px at 20% 0%, rgba(216, 180, 90, 0.14), transparent 60%),
+        rgba(255, 255, 255, 0.03);
+
+      @include respond-to('sm') {
+        grid-column: 1 / -1;
+      }
+
+      @include respond-to('lg') {
+        grid-column: 1 / 3;
+        grid-row: 1 / 3;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        border-radius: inherit;
+        padding: 1px;
+        background: conic-gradient(
+          from var(--stats-angle),
+          transparent 18%,
+          rgba(216, 180, 90, 0.7) 32%,
+          transparent 52%
+        );
+        -webkit-mask:
+          linear-gradient(#000 0 0) content-box,
+          linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+        animation: stats-border 6s linear infinite;
+      }
+    }
+  }
+
+  &__eyebrow {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: $color-primary;
+  }
+
+  &__title {
+    font-size: clamp(1.7rem, 3.2vw, 2.5rem);
+    line-height: 1.1;
+    color: $color-heading;
+  }
+
+  &__hl {
+    background: linear-gradient(100deg, $color-primary-light, $color-primary 55%, $color-primary-dark);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  &__text {
+    font-size: $font-size-base;
+    color: $color-text-muted;
+    max-width: 34ch;
+  }
+
+  &__feature-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    align-self: flex-start;
+    margin-top: $space-xs;
+    padding: 0.3rem 0.75rem;
+    border-radius: $radius-pill;
+    background: rgba(216, 180, 90, 0.12);
+    border: 1px solid rgba(216, 180, 90, 0.3);
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-primary;
+  }
+
+  // -- Métricas --
+  &__head {
+    display: flex;
+  }
+
+  &__icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: $radius-md;
+    background: rgba(216, 180, 90, 0.14);
+    border: 1px solid rgba(216, 180, 90, 0.35);
+    color: $color-primary;
+  }
+
+  &__value {
+    display: inline-flex;
+    align-items: baseline;
+    margin-top: auto;
+    font-size: clamp(1.7rem, 3vw, 2.3rem);
+    font-weight: $font-weight-bold;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    background: linear-gradient(120deg, $color-primary-light, $color-primary 55%, $color-primary-dark);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  &__stars {
+    font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+    letter-spacing: 0.06em;
+  }
+
+  &__label {
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $color-heading;
+  }
+
+  &__detail {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+  }
+}
+
+@keyframes stats-border {
+  to {
+    --stats-angle: 360deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stats__cell--feature::after {
+    animation: none;
+  }
+}

@@ -1,29 +1,41 @@
 import SectionHeader from '@components/ui/SectionHeader/SectionHeader.jsx';
-import Reveal from '@components/ui/Reveal/Reveal.jsx';
 import { LIVE_MATCHES } from '@data/matches.js';
+import { useLiveOdds } from '@hooks/useLiveOdds.js';
+import { useLang } from '@/i18n/index.jsx';
 import MatchCard from './MatchCard/MatchCard.jsx';
 import './LiveMatches.scss';
 
 /**
- * LiveMatches — Rejilla de partidos en directo con cuotas seleccionables.
+ * LiveMatches — Tablero en directo: 25 partidos desfilando de lado a lado
+ * (marquee edge-to-edge) con las cuotas moviéndose en tiempo real.
  */
 export default function LiveMatches() {
+  const { t } = useLang();
+  const matches = useLiveOdds(LIVE_MATCHES, { interval: 2600 });
+  const loop = [...matches, ...matches];
+
   return (
     <section className="live-matches" id="en-vivo">
       <div className="container">
         <SectionHeader
-          eyebrow="En directo"
-          title="Apuesta mientras la acción sucede"
-          subtitle="Cuotas actualizadas en tiempo real en los partidos más importantes del momento."
+          eyebrow={t('live.eyebrow')}
+          title={t('live.title')}
+          subtitle={t('live.subtitle')}
         />
+      </div>
 
-        <div className="live-matches__grid">
-          {LIVE_MATCHES.map((match, i) => (
-            <Reveal key={match.id} delay={i * 90}>
+      <div className="live-matches__marquee" aria-label="Partidos en directo">
+        <ul className="live-matches__track">
+          {loop.map((match, i) => (
+            <li
+              className="live-matches__item"
+              key={`${match.id}-${i}`}
+              aria-hidden={i >= matches.length}
+            >
               <MatchCard match={match} />
-            </Reveal>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );
