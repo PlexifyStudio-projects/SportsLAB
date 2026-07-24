@@ -1,25 +1,23 @@
 name: Deploy a GitHub Pages
 
-# Construye la landing con Vite y la publica en GitHub Pages en cada push a main.
+# Construye la landing con Vite y publica `dist/` en la rama `gh-pages`.
+# Este método no usa la API de habilitación de Pages (evita el error
+# "Resource not accessible by integration" cuando la organización la restringe).
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
-# Permisos que necesita el despliegue de Pages.
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
-# Evita despliegues solapados; deja terminar el que está en curso.
 concurrency:
-  group: pages
+  group: pages-deploy
   cancel-in-progress: false
 
 jobs:
-  build:
-    name: Build
+  deploy:
+    name: Build & Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -37,24 +35,10 @@ jobs:
       - name: Build de producción
         run: npm run build
 
-      - name: Configurar Pages (auto-habilita si hace falta)
-        uses: actions/configure-pages@v5
+      - name: Publicar en la rama gh-pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          enablement: true
-
-      - name: Subir artefacto
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-
-  deploy:
-    name: Deploy
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Publicar en Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          # Evita que GitHub procese el sitio con Jekyll.
+          enable_jekyll: false
