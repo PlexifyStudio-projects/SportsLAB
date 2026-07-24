@@ -1,0 +1,32 @@
+// =============================================================================
+// COMPONENT · SectionHeader  (BEM)
+// =============================================================================
+@use '@styles/abstracts' as *;
+
+.section-header {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  margin-bottom: $space-xl;
+  max-width: 640px;
+
+  &--center {
+    align-items: center;
+    text-align: center;
+    margin-inline: auto;
+  }
+
+  &__eyebrow {
+    color: $color-primary;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: $font-size-sm;
+    margin: 0;
+  }
+
+  &__subtitle {
+    font-size: $font-size-lg;
+    margin: 0;
+  }
+}

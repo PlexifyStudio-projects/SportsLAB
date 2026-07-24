@@ -1,0 +1,27 @@
+// =============================================================================
+// COMPONENT · MobileCta  (BEM) — barra de acción inferior solo en móvil
+// =============================================================================
+@use '@styles/abstracts' as *;
+
+.mobile-cta {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: $z-overlay;
+  display: flex;
+  gap: $space-sm;
+  padding: $space-sm;
+  padding-bottom: calc($space-sm + env(safe-area-inset-bottom, 0px));
+  background: rgba(10, 10, 12, 0.9);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid $color-border;
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.55);
+
+  // A partir de tablet grande dejamos de mostrarla: el header ya tiene los CTAs.
+  @include respond-to('lg') {
+    display: none;
+  }
+
+  &__button {
+    flex: 1;
+  }
+}

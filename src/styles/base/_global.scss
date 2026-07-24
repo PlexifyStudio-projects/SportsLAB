@@ -1,0 +1,48 @@
+// =============================================================================
+// BASE · Estilos globales / helpers de layout
+// =============================================================================
+@use '../abstracts' as *;
+
+body {
+  background:
+    radial-gradient(1100px 560px at 82% -14%, rgba(216, 180, 90, 0.18), transparent 62%),
+    radial-gradient(760px 480px at -8% 4%, rgba(216, 180, 90, 0.06), transparent 55%), $color-bg;
+  background-attachment: fixed;
+}
+
+// Contenedor reutilizable como clase utilitaria.
+.container {
+  @include container($container-max);
+}
+
+// Salto al contenido para accesibilidad de teclado.
+.skip-link {
+  @include visually-hidden;
+
+  &:focus {
+    position: fixed;
+    top: $space-sm;
+    left: $space-sm;
+    z-index: $z-overlay;
+    width: auto;
+    height: auto;
+    padding: $space-sm $space-md;
+    clip: auto;
+    background: $color-primary;
+    color: $color-text-inverse;
+    border-radius: $radius-md;
+    font-weight: $font-weight-semibold;
+  }
+}
+
+#root {
+  isolation: isolate;
+}
+
+// Reserva espacio inferior en móvil para que la barra fija (.mobile-cta) no
+// tape el final del contenido. En pantallas grandes la barra no existe.
+@media (max-width: (breakpoint('lg') - 1px)) {
+  body {
+    padding-bottom: 76px;
+  }
+}

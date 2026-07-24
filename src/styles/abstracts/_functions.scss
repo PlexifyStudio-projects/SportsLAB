@@ -1,0 +1,13 @@
+// =============================================================================
+// ABSTRACTS · Funciones
+// =============================================================================
+@use 'sass:map';
+@use 'breakpoints' as bp;
+
+// Devuelve el valor de un breakpoint por su nombre.
+@function breakpoint($name) {
+  @if not map.has-key(bp.$breakpoints, $name) {
+    @error "Breakpoint `#{$name}` no existe en $breakpoints.";
+  }
+  @return map.get(bp.$breakpoints, $name);
+}

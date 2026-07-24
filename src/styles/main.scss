@@ -1,0 +1,12 @@
+// =============================================================================
+// SportsLAB · Hoja de estilos raíz
+// -----------------------------------------------------------------------------
+// Solo importa capas que emiten CSS global (base). Los abstracts (tokens,
+// mixins, funciones) NO se importan aquí: cada componente los consume vía
+// `@use '@styles/abstracts' as *;`. Los estilos de componentes/secciones viven
+// co-localizados junto a su .jsx (metodología por componente + BEM).
+// =============================================================================
+
+// Fuente (Inter) — servida localmente vía CDN de Google Fonts en index si se
+// desea. Aquí solo declaramos la cascada base.
+@use 'base';

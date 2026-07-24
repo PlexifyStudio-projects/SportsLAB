@@ -1,0 +1,76 @@
+// =============================================================================
+// COMPONENT · Button  (BEM)
+// =============================================================================
+@use '@styles/abstracts' as *;
+
+.button {
+  --_bg: #{$color-primary};
+  --_fg: #{$color-text-inverse};
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-sm;
+  padding: $space-sm $space-lg;
+  border-radius: $radius-md;
+  font-weight: $font-weight-semibold;
+  font-size: $font-size-base;
+  line-height: 1;
+  white-space: nowrap;
+  background: var(--_bg);
+  color: var(--_fg);
+  transition:
+    transform $transition-fast,
+    filter $transition-fast,
+    background $transition-fast;
+
+  @include focus-ring;
+
+  &:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  // -- Variantes --
+  &--primary {
+    --_bg: #{$color-primary};
+    --_fg: #{$color-text-inverse};
+    box-shadow: $shadow-glow;
+  }
+
+  &--accent {
+    --_bg: #{$color-accent};
+    --_fg: #{$color-accent-ink};
+    box-shadow: $shadow-md;
+  }
+
+  &--secondary {
+    --_bg: #{$color-surface-2};
+    --_fg: #{$color-text};
+    border: 1px solid $color-border;
+  }
+
+  &--ghost {
+    --_bg: transparent;
+    --_fg: #{$color-text};
+
+    &:hover {
+      --_bg: rgba(255, 255, 255, 0.07);
+    }
+  }
+
+  // -- Tamaños --
+  &--lg {
+    padding: $space-md $space-xl;
+    font-size: $font-size-lg;
+  }
+
+  // -- Modificadores --
+  &--full {
+    width: 100%;
+  }
+}

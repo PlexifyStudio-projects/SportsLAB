@@ -1,0 +1,62 @@
+// =============================================================================
+// SECTION · Features  (BEM)
+// =============================================================================
+@use '@styles/abstracts' as *;
+
+.features {
+  padding-block: $space-2xl;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-lg;
+
+    @include respond-to('sm') {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include respond-to('lg') {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    gap: $space-sm;
+    padding: $space-lg;
+    border-radius: $radius-lg;
+    background: $color-surface;
+    border: 1px solid $color-border;
+    transition:
+      transform $transition-base,
+      box-shadow $transition-base,
+      border-color $transition-base;
+
+    &:hover {
+      transform: translateY(-4px);
+      border-color: $color-accent-dark;
+      box-shadow: $shadow-md;
+    }
+  }
+
+  &__icon {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    margin-bottom: $space-xs;
+    border-radius: $radius-md;
+    background: rgba(216, 180, 90, 0.16);
+    color: $color-primary;
+    border: 1px solid rgba(216, 180, 90, 0.35);
+  }
+
+  &__card-title {
+    color: $color-heading;
+  }
+
+  &__card-desc {
+    font-size: $font-size-sm;
+  }
+}

@@ -1,0 +1,126 @@
+// =============================================================================
+// COMPONENT · Header  (BEM)
+// =============================================================================
+@use '@styles/abstracts' as *;
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: $z-header;
+  height: $header-height;
+  display: flex;
+  align-items: center;
+  background: rgba(10, 10, 11, 0.68);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  transition:
+    border-color $transition-base,
+    background $transition-base,
+    box-shadow $transition-base;
+
+  &--scrolled {
+    border-bottom-color: $color-border;
+    background: rgba(10, 10, 11, 0.9);
+    box-shadow: $shadow-sm;
+  }
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-lg;
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: $space-sm;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-lg;
+    color: $color-heading;
+  }
+
+  &__logo {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: $radius-sm;
+    background: linear-gradient(135deg, $color-primary, $color-primary-dark);
+    color: $color-text-inverse;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-sm;
+  }
+
+  // -- Navegación --
+  &__nav-list {
+    display: flex;
+    align-items: center;
+    gap: $space-lg;
+  }
+
+  &__nav-link {
+    color: $color-text-muted;
+    font-weight: $font-weight-medium;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-text;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $space-sm;
+  }
+
+  &__login {
+    display: none;
+
+    @include respond-to('md') {
+      display: inline-flex;
+    }
+  }
+
+  // -- Menú hamburguesa (móvil) --
+  &__burger {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: $space-sm;
+
+    @include respond-to('lg') {
+      display: none;
+    }
+  }
+
+  &__burger-bar {
+    width: 22px;
+    height: 2px;
+    background: $color-text;
+    border-radius: 2px;
+  }
+
+  // -- Comportamiento responsive de la navegación --
+  &__nav {
+    @media (max-width: (breakpoint('lg') - 1px)) {
+      position: absolute;
+      inset: $header-height 0 auto 0;
+      display: none;
+      padding: $space-md;
+      background: $color-surface;
+      border-bottom: 1px solid $color-border;
+
+      &--open {
+        display: block;
+      }
+
+      .header__nav-list {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: $space-md;
+      }
+    }
+  }
+}

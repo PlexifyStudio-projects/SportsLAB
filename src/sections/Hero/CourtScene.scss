@@ -1,0 +1,71 @@
+// =============================================================================
+// COMPONENT · CourtScene — ilustración cinematográfica del hero
+// =============================================================================
+@use '@styles/abstracts' as *;
+
+.court-scene {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  margin-inline: auto;
+
+  &__svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  // Leve balanceo 3D de la pista.
+  &__court {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: court-float 9s ease-in-out infinite;
+  }
+
+  // La pelota "flota" en el aire.
+  &__ball {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: ball-bounce 3.6s ease-in-out infinite;
+  }
+
+  // La estela se dibuja en bucle.
+  &__trail {
+    stroke-dasharray: 1 16;
+    animation: trail-flow 1.4s linear infinite;
+  }
+}
+
+@keyframes court-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(-0.6deg);
+  }
+}
+
+@keyframes ball-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-22px);
+  }
+}
+
+@keyframes trail-flow {
+  to {
+    stroke-dashoffset: -34;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .court-scene__court,
+  .court-scene__ball,
+  .court-scene__trail {
+    animation: none;
+  }
+}

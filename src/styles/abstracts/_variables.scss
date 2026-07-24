@@ -1,0 +1,88 @@
+// =============================================================================
+// ABSTRACTS · Variables (Design Tokens)
+// Tema: TENIS · Estética PREMIUM / cinematográfica.
+// Paleta: NEGRO (predominante) · DORADO · BLANCO.
+// Fuente única de verdad.
+// =============================================================================
+
+// -- Dorado (color de marca / acento principal) -----------------------------
+$color-primary: #d8b45a; // Oro
+$color-primary-dark: #b28a30;
+$color-primary-light: #f0d891;
+
+// Alias semánticos del acento (mismo oro; nombres usados por componentes).
+$color-accent: #d8b45a;
+$color-accent-dark: #b28a30;
+$color-accent-light: #f0d891;
+$color-accent-ink: #14100a; // Texto oscuro legible SOBRE el oro
+
+$color-danger: #e2574c;
+$color-success: #4caf72;
+$color-info: #d8b45a;
+
+// -- Superficies / fondos (NEGRO predominante) ------------------------------
+$color-bg: #0a0a0b; // Fondo base (negro)
+$color-surface: #131316; // Tarjetas
+$color-surface-2: #1c1c21; // Superficie elevada / hover
+$color-border: #2b2b31;
+
+// -- Texto ------------------------------------------------------------------
+$color-heading: #ffffff; // Titulares (blanco)
+$color-text: #d7d7dd; // Cuerpo (blanco roto)
+$color-text-muted: #9a9aa3;
+$color-text-inverse: #14100a; // Texto sobre superficies doradas
+
+// -- Espaciado (escala 4px) -------------------------------------------------
+$space-xs: 0.25rem; //  4px
+$space-sm: 0.5rem; //   8px
+$space-md: 1rem; //    16px
+$space-lg: 1.5rem; //  24px
+$space-xl: 2.5rem; //  40px
+$space-2xl: 4rem; //   64px
+$space-3xl: 6rem; //   96px
+
+// -- Tipografía -------------------------------------------------------------
+$font-family-base: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+$font-family-heading: 'Inter', 'Segoe UI', system-ui, sans-serif;
+
+$font-size-xs: 0.75rem;
+$font-size-sm: 0.875rem;
+$font-size-base: 1rem;
+$font-size-lg: 1.125rem;
+$font-size-xl: 1.5rem;
+$font-size-2xl: 2rem;
+$font-size-3xl: 2.75rem;
+$font-size-4xl: 3.5rem;
+
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+$line-height-tight: 1.15;
+$line-height-base: 1.6;
+
+// -- Radios / bordes --------------------------------------------------------
+$radius-sm: 6px;
+$radius-md: 10px;
+$radius-lg: 16px;
+$radius-pill: 999px;
+
+// -- Sombras / elevación (profundas sobre negro + brillo dorado) ------------
+$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.6);
+$shadow-md: 0 12px 30px rgba(0, 0, 0, 0.55);
+$shadow-lg: 0 28px 60px rgba(0, 0, 0, 0.65);
+$shadow-glow: 0 12px 40px rgba(216, 180, 90, 0.28);
+
+// -- Layout -----------------------------------------------------------------
+$container-max: 1200px;
+$header-height: 72px;
+
+// -- Transiciones -----------------------------------------------------------
+$transition-fast: 150ms ease;
+$transition-base: 250ms ease;
+
+// -- Z-index ----------------------------------------------------------------
+$z-header: 1000;
+$z-overlay: 1100;
+$z-modal: 1200;

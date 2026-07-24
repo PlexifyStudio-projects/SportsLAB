@@ -1,0 +1,236 @@
+// =============================================================================
+// SECTION · Hero  (BEM) — portada cinematográfica
+// =============================================================================
+@use '@styles/abstracts' as *;
+
+.hero {
+  position: relative;
+  padding-block: $space-xl $space-2xl;
+  overflow: hidden;
+
+  @include respond-to('lg') {
+    padding-block: $space-2xl $space-3xl;
+  }
+
+  &__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-xl;
+    align-items: center;
+
+    @include respond-to('lg') {
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: $space-2xl;
+    }
+  }
+
+  // -- Columna de texto --
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $space-lg;
+    animation: hero-in 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  &__title {
+    font-size: clamp(2.4rem, 7vw, 4.6rem);
+    line-height: 1.03;
+    letter-spacing: -0.025em;
+    max-width: 15ch;
+  }
+
+  // Palabra destacada en oro con degradado sutil (acento editorial).
+  &__highlight {
+    position: relative;
+    white-space: nowrap;
+    background: linear-gradient(100deg, $color-primary-light, $color-primary 55%, $color-primary-dark);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  &__subtitle {
+    font-size: $font-size-lg;
+    max-width: 46ch;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-md;
+  }
+
+  &__trust {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-lg;
+    margin-top: $space-xs;
+  }
+
+  &__trust-item {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-xs;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-muted;
+
+    .icon {
+      color: $color-primary;
+    }
+  }
+
+  // -- Columna visual --
+  &__visual {
+    position: relative;
+    animation: hero-visual-in 1100ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  // -- Boleto "glass" flotante --
+  &__ticket {
+    display: flex;
+    flex-direction: column;
+    gap: $space-md;
+    margin-top: $space-lg;
+    padding: $space-lg;
+    border-radius: $radius-lg;
+    background: rgba(19, 19, 22, 0.72);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(216, 180, 90, 0.35);
+    box-shadow: $shadow-lg;
+
+    @include respond-to('md') {
+      position: absolute;
+      left: -$space-md;
+      bottom: -$space-lg;
+      width: 300px;
+      margin-top: 0;
+      animation: ticket-float 6s ease-in-out infinite;
+    }
+  }
+
+  &__ticket-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__ticket-league {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+  }
+
+  &__ticket-match {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: $font-weight-bold;
+    color: $color-heading;
+  }
+
+  &__ticket-vs {
+    color: $color-text-muted;
+    font-weight: $font-weight-normal;
+    font-size: $font-size-sm;
+  }
+
+  &__ticket-selection {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $space-sm $space-md;
+    border-radius: $radius-md;
+    background: rgba(216, 180, 90, 0.16);
+    border: 1px solid $color-accent-dark;
+  }
+
+  &__ticket-odd {
+    color: $color-primary;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__ticket-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+
+    &--total {
+      padding-top: $space-md;
+      border-top: 1px dashed $color-border;
+      font-size: $font-size-base;
+      color: $color-text;
+
+      strong {
+        color: $color-primary;
+        font-size: $font-size-lg;
+      }
+    }
+  }
+
+  // -- Métricas (banda inferior) --
+  &__stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-xl;
+    margin-top: $space-lg;
+    padding-top: $space-lg;
+    border-top: 1px solid $color-border;
+
+    @include respond-to('lg') {
+      grid-column: 1 / -1;
+      margin-top: $space-2xl;
+    }
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__stat-value {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-heading;
+    letter-spacing: -0.02em;
+  }
+
+  &__stat-label {
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+  }
+}
+
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+}
+
+@keyframes hero-visual-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+
+@keyframes ticket-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__content,
+  .hero__visual,
+  .hero__ticket {
+    animation: none;
+  }
+}

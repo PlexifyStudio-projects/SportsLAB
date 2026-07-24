@@ -1,0 +1,9 @@
+// =============================================================================
+// ABSTRACTS · Barrel (@forward)
+// Punto de entrada único para todo lo "sin salida CSS": tokens, funciones y
+// mixins. Uso en cualquier módulo:  @use '@styles/abstracts' as *;
+// =============================================================================
+@forward 'variables';
+@forward 'breakpoints';
+@forward 'functions';
+@forward 'mixins';
