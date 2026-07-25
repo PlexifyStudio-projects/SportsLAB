@@ -1,0 +1,25 @@
+{
+  // ---------------------------------------------------------------------------
+  // Cloudflare Workers Builds — despliegue de abrahamsportslab.com
+  //
+  // Este proyecto no tiene código de Worker: es un sitio 100% estático servido
+  // desde `assets`. El fichero existe porque Workers Builds ejecuta siempre un
+  // `wrangler deploy`, y sin una configuración explícita Wrangler intenta
+  // deducirla leyendo `vite.config.js` y falla con "Error parsing file".
+  //
+  // El build (`npm run build`) tiene que correr ANTES del deploy: es el que
+  // genera ./dist.
+  // ---------------------------------------------------------------------------
+  "name": "sportslab",
+  "compatibility_date": "2026-07-25",
+
+  "assets": {
+    "directory": "./dist"
+
+    // Sin `not_found_handling` a propósito. Es una landing de una sola URL
+    // (las secciones son anclas #, y el inglés va en ?lang=en, misma ruta), así
+    // que no hay enrutado en cliente que rescatar. Con
+    // "single-page-application" cualquier ruta inventada devolvería el index
+    // con un 200 y Google lo registraría como soft 404.
+  }
+}
