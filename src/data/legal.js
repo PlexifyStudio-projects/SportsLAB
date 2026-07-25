@@ -35,13 +35,13 @@ export const LEGAL = {
     terms: {
       title: 'Términos y condiciones',
       intro:
-        'Al acceder a este sitio y al canal de Telegram de SportsLAB aceptas estas condiciones. Si no estás de acuerdo con alguna de ellas, no utilices el servicio.',
+        'Al acceder a este sitio y al canal de Telegram de AbrahamSportsLAB aceptas estas condiciones. Si no estás de acuerdo con alguna de ellas, no utilices el servicio.',
       sections: [
         {
-          heading: '1. Qué es SportsLAB',
+          heading: '1. Qué es AbrahamSportsLAB',
           body: [
-            'SportsLAB es un servicio de información y análisis deportivo. Publicamos pronósticos ("picks") sobre partidos de tenis de los circuitos ATP, WTA, Grand Slams, Masters 1000 y Challengers, junto con el análisis que los sustenta y una cuota de referencia.',
-            'SportsLAB NO es una casa de apuestas, no acepta depósitos, no gestiona dinero de los usuarios y no tramita apuestas en nombre de nadie. Cualquier apuesta la realizas tú, por tu cuenta y riesgo, en el operador que elijas.',
+            'AbrahamSportsLAB es un servicio de información y análisis deportivo. Publicamos pronósticos ("picks") sobre partidos de tenis de los circuitos ATP, WTA, Grand Slams, Masters 1000 y Challengers, junto con el análisis que los sustenta y una cuota de referencia.',
+            'AbrahamSportsLAB NO es una casa de apuestas, no acepta depósitos, no gestiona dinero de los usuarios y no tramita apuestas en nombre de nadie. Cualquier apuesta la realizas tú, por tu cuenta y riesgo, en el operador que elijas.',
           ],
         },
         {
@@ -55,7 +55,7 @@ export const LEGAL = {
           heading: '3. Ausencia de garantía de resultados',
           body: [
             'Ningún pronóstico garantiza ganancias. Los porcentajes de efectividad que publicamos son un registro histórico y no predicen resultados futuros.',
-            'Las decisiones que tomes a partir de nuestra información son tuyas. SportsLAB no se responsabiliza de pérdidas económicas derivadas del uso del servicio.',
+            'Las decisiones que tomes a partir de nuestra información son tuyas. AbrahamSportsLAB no se responsabiliza de pérdidas económicas derivadas del uso del servicio.',
           ],
         },
         {
@@ -186,7 +186,7 @@ export const LEGAL = {
         {
           heading: 'Nuestro compromiso',
           body: [
-            'SportsLAB no publica pronósticos dirigidos a menores de 18 años, no promete ganancias garantizadas y no anima a recuperar pérdidas. Si nos pides que dejemos de enviarte contenido, lo hacemos sin preguntar.',
+            'AbrahamSportsLAB no publica pronósticos dirigidos a menores de 18 años, no promete ganancias garantizadas y no anima a recuperar pérdidas. Si nos pides que dejemos de enviarte contenido, lo hacemos sin preguntar.',
           ],
         },
       ],
@@ -197,13 +197,13 @@ export const LEGAL = {
     terms: {
       title: 'Terms & conditions',
       intro:
-        'By accessing this site and the SportsLAB Telegram channel you accept these terms. If you disagree with any of them, do not use the service.',
+        'By accessing this site and the AbrahamSportsLAB Telegram channel you accept these terms. If you disagree with any of them, do not use the service.',
       sections: [
         {
-          heading: '1. What SportsLAB is',
+          heading: '1. What AbrahamSportsLAB is',
           body: [
-            'SportsLAB is a sports information and analysis service. We publish tips on ATP, WTA, Grand Slam, Masters 1000 and Challenger tennis matches, along with the analysis behind them and a reference odd.',
-            'SportsLAB is NOT a bookmaker. We do not accept deposits, do not handle user funds and do not place bets on anyone’s behalf. Any bet you place is yours, at your own risk, with the operator you choose.',
+            'AbrahamSportsLAB is a sports information and analysis service. We publish tips on ATP, WTA, Grand Slam, Masters 1000 and Challenger tennis matches, along with the analysis behind them and a reference odd.',
+            'AbrahamSportsLAB is NOT a bookmaker. We do not accept deposits, do not handle user funds and do not place bets on anyone’s behalf. Any bet you place is yours, at your own risk, with the operator you choose.',
           ],
         },
         {
@@ -217,7 +217,7 @@ export const LEGAL = {
           heading: '3. No guaranteed results',
           body: [
             'No tip guarantees a profit. The hit rates we publish are a historical record and do not predict future results.',
-            'Any decision you make based on our information is yours. SportsLAB is not liable for financial losses arising from use of the service.',
+            'Any decision you make based on our information is yours. AbrahamSportsLAB is not liable for financial losses arising from use of the service.',
           ],
         },
         {
@@ -346,7 +346,7 @@ export const LEGAL = {
         {
           heading: 'Our commitment',
           body: [
-            'SportsLAB does not target tips at anyone under 18, does not promise guaranteed profits and does not encourage chasing losses. If you ask us to stop sending you content, we do so without question.',
+            'AbrahamSportsLAB does not target tips at anyone under 18, does not promise guaranteed profits and does not encourage chasing losses. If you ask us to stop sending you content, we do so without question.',
           ],
         },
       ],
