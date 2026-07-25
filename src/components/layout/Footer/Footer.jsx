@@ -42,19 +42,10 @@ const COLUMNS = [
 // Documentos legales: abren un modal, no navegan fuera.
 const LEGAL_LINKS = ['terms', 'privacy', 'cookies', 'responsible'];
 
-// Se quitó WhatsApp: no había número, y un enlace a wa.me vacío no lleva a
-// ninguna parte.
-// PENDIENTE: Facebook apunta a `#` hasta que el cliente facilite la URL real
-// del perfil. Al no ser un enlace externo, no lleva `target="_blank"` ni entra
-// en el `sameAs` del JSON-LD.
+// Solo canales que existen de verdad. Se descartaron WhatsApp (no hay número)
+// y Facebook (no hay perfil): un icono que no lleva a ninguna parte resta
+// credibilidad en vez de sumarla.
 const SOCIALS = [
-  {
-    id: 'facebook',
-    label: 'Facebook',
-    href: '#',
-    brand: '#1877F2',
-    path: 'M13.5 21v-6.5h2.2l.33-2.56H13.5V10.3c0-.74.2-1.25 1.27-1.25h1.36V6.76c-.24-.03-1.04-.1-1.98-.1-1.96 0-3.3 1.2-3.3 3.4v1.87H8.6v2.57h2.25V21h2.65Z',
-  },
   {
     id: 'instagram',
     label: 'Instagram',
