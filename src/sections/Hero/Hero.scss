@@ -237,34 +237,6 @@
       transform: translateY(-6px) translateZ(28px) scale(1.08);
     }
 
-    // Nombre del apostador: visible al pasar el cursor.
-    &-name {
-      position: absolute;
-      bottom: calc(100% + 10px);
-      left: 50%;
-      z-index: 4;
-      padding: 0.28rem 0.6rem;
-      border-radius: $radius-pill;
-      background: rgba(19, 19, 22, 0.94);
-      border: 1px solid rgba(216, 180, 90, 0.35);
-      box-shadow: $shadow-md;
-      font-size: $font-size-xs;
-      font-weight: $font-weight-semibold;
-      color: $color-primary-light;
-      white-space: nowrap;
-      opacity: 0;
-      transform: translate(-50%, 6px);
-      pointer-events: none;
-      transition:
-        opacity $transition-fast,
-        transform $transition-base;
-    }
-
-    &:hover &-name,
-    &:focus-visible &-name {
-      opacity: 1;
-      transform: translate(-50%, 0);
-    }
 
     &[data-i='2'] {
       background: linear-gradient(135deg, #e6c765, #a8792a);

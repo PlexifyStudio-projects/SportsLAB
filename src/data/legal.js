@@ -11,7 +11,7 @@
 // =============================================================================
 
 /** Correo de contacto público del servicio. */
-export const CONTACT_EMAIL = 'abrahamsportslab@gmail.com';
+export const CONTACT_EMAIL = 'jhonbarrioscuevas@gmail.com';
 
 /** Fecha de última actualización de los documentos legales. */
 export const LEGAL_UPDATED = '2026-07-25';

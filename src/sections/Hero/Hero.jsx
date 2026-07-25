@@ -12,12 +12,13 @@ import bettor4 from '@assets/images/hero4.jpeg';
 import { gsap, useGSAP, prefersReducedMotion } from '@utils/motion.js';
 import './Hero.scss';
 
-// Prueba social del hero: apostadores destacados de la comunidad.
+// Prueba social del hero: caras de la comunidad, sin nombres. Son puramente
+// ilustrativas, de ahí el `alt=""` y el `aria-hidden` del contenedor.
 const BETTORS = [
-  { id: 'b1', name: 'Andrés M.', photo: bettor1 },
-  { id: 'b2', name: 'Camila R.', photo: bettor2 },
-  { id: 'b3', name: 'Julián T.', photo: bettor3 },
-  { id: 'b4', name: 'Valeria O.', photo: bettor4 },
+  { id: 'b1', photo: bettor1 },
+  { id: 'b2', photo: bettor2 },
+  { id: 'b3', photo: bettor3 },
+  { id: 'b4', photo: bettor4 },
 ];
 
 const CARDS = [
@@ -130,7 +131,7 @@ export default function Hero() {
           <p className="hero__subtitle">{t('hero.subtitle')}</p>
 
           <div className="hero__social">
-            <div className="hero__avatars">
+            <div className="hero__avatars" aria-hidden="true">
               {BETTORS.map((bettor, i) => (
                 <span className="hero__avatar" key={bettor.id} data-i={i + 1}>
                   <img
@@ -142,12 +143,9 @@ export default function Hero() {
                     loading="lazy"
                     decoding="async"
                   />
-                  <span className="hero__avatar-name">{bettor.name}</span>
                 </span>
               ))}
-              <span className="hero__avatar hero__avatar--count" aria-hidden="true">
-                +2K
-              </span>
+              <span className="hero__avatar hero__avatar--count">+2K</span>
             </div>
             <div className="hero__rating">
               <span className="hero__stars">★★★★★</span>
