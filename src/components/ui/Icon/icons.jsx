@@ -4,11 +4,7 @@
  * Usan `currentColor`, de modo que heredan el color del contexto.
  *
  * Estilo: trazo (stroke) de 1.75, extremos redondeados. Coherentes entre sí.
- *
- * Módulo de datos (no componentes): se desactiva la regla de fast-refresh.
  */
-
-/* eslint-disable react-refresh/only-export-components */
 export const ICON_PATHS = {
   'tennis-ball': (
     <>
@@ -33,15 +29,6 @@ export const ICON_PATHS = {
       <path d="M17 5.2h2.4A2.4 2.4 0 0 1 16.7 8.4" />
       <path d="M12 12.5V15" />
       <path d="M9.6 15h4.8l.6 4H9Z" />
-    </>
-  ),
-  court: (
-    <>
-      <rect x="3" y="4" width="18" height="16" rx="1.2" />
-      <path d="M3 12h18" />
-      <path d="M12 4v16" />
-      <path d="M7 4v16" />
-      <path d="M17 4v16" />
     </>
   ),
   flag: (
@@ -72,35 +59,12 @@ export const ICON_PATHS = {
       <path d="M19.3 4.7a10 10 0 0 1 0 14.6" />
     </>
   ),
-  clock: (
-    <>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M12 7v5.2l3.2 2" />
-    </>
-  ),
-  fire: (
-    <path d="M12 3c1.2 3-2 4.2-2 7a2 2 0 0 0 4 0c0-.6 0-.9-.1-1.3 1.9 1.1 3.1 3.1 3.1 5.3a5 5 0 0 1-10 0c0-4 3-6 5-11Z" />
-  ),
   medal: (
     <>
       <circle cx="12" cy="15" r="5" />
       <path d="M12 13.2l.9 1.8 2 .3-1.4 1.4.3 2-1.8-1-1.8 1 .3-2L9 15.3l2-.3Z" />
       <path d="M8.5 3l2.2 6" />
       <path d="M15.5 3l-2.2 6" />
-    </>
-  ),
-  headset: (
-    <>
-      <path d="M4 13v-1a8 8 0 0 1 16 0v1" />
-      <rect x="3" y="13" width="4" height="6.5" rx="1.2" />
-      <rect x="17" y="13" width="4" height="6.5" rx="1.2" />
-      <path d="M20 19.5a4 3 0 0 1-4 2.5h-2" />
-    </>
-  ),
-  lock: (
-    <>
-      <rect x="5" y="11" width="14" height="9.5" rx="2" />
-      <path d="M8 11V8a4 4 0 0 1 8 0v3" />
     </>
   ),
   wallet: (
@@ -127,18 +91,6 @@ export const ICON_PATHS = {
     <>
       <path d="M19 12H5" />
       <path d="M11 6l-6 6 6 6" />
-    </>
-  ),
-  search: (
-    <>
-      <circle cx="11" cy="11" r="7" />
-      <path d="M16.5 16.5 21 21" />
-    </>
-  ),
-  user: (
-    <>
-      <circle cx="12" cy="8" r="4" />
-      <path d="M4.5 20a7.5 7.5 0 0 1 15 0" />
     </>
   ),
   'chevron-down': <path d="M5 9l7 7 7-7" />,
@@ -171,12 +123,6 @@ export const ICON_PATHS = {
       <path d="M12 9c2 0 4.5-.5 4.5-2.8C16.5 5 15.6 4 14.4 4 12.6 4 12 6.5 12 9Z" />
     </>
   ),
-  bell: (
-    <>
-      <path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z" />
-      <path d="M10.5 19a1.5 1.5 0 0 0 3 0" />
-    </>
-  ),
   telegram: (
     <>
       <path d="M21.5 4.3 3 11.4c-.85.32-.83 1.55.03 1.84l4.6 1.53 1.78 5.2c.24.7 1.14.86 1.6.28l2.4-2.9 4.6 3.4c.58.43 1.42.12 1.55-.6l2.95-14.4c.16-.82-.66-1.5-1.6-1.45Z" />
@@ -191,5 +137,3 @@ export const ICON_PATHS = {
     </>
   ),
 };
-
-export const ICON_NAMES = Object.keys(ICON_PATHS);

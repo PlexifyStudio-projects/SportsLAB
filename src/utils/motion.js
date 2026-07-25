@@ -74,7 +74,7 @@ export function rafThrottle(handler) {
  * @param {string} [vars.start='top 88%']     Punto de disparo.
  * @returns {gsap.core.Tween|null}
  */
-export function revealOnScroll(targets, { trigger, start = 'top 88%', ...vars } = {}) {
+function revealOnScroll(targets, { trigger, start = 'top 88%', ...vars } = {}) {
   if (prefersReducedMotion()) return null;
 
   const tween = gsap.from(targets, {
@@ -212,38 +212,6 @@ export function scrollDrift(targets, { trigger, spread = 34 } = {}) {
   });
 
   return mm;
-}
-
-/**
- * scrollExit — Salida "de plano": el bloque se aleja y se desvanece conforme
- * el usuario lo abandona hacia abajo. Evita el corte seco entre secciones.
- *
- * @param {string|Element} target
- * @param {Object} [opts]
- * @param {string|Element} [opts.trigger]
- * @param {number} [opts.scale=0.94]   Escala final.
- * @param {number} [opts.blur=0]       Desenfoque final en px (0 = sin filtro).
- * @returns {gsap.core.Tween|null}
- */
-export function scrollExit(target, { trigger, scale = 0.94, blur = 0 } = {}) {
-  if (prefersReducedMotion()) return null;
-
-  return gsap.to(target, {
-    opacity: 0,
-    scale,
-    y: -40,
-    // `filter` es caro: solo se anima si se pide explícitamente.
-    ...(blur ? { filter: `blur(${blur}px)` } : {}),
-    ease: 'none',
-    scrollTrigger: {
-      trigger: trigger ?? target,
-      // Arranca a media salida para que el contenido se lea entero antes.
-      start: 'center top+=15%',
-      end: 'bottom top+=10%',
-      scrub: true,
-      invalidateOnRefresh: true,
-    },
-  });
 }
 
 /**

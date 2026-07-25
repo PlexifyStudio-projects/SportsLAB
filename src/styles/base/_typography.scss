@@ -75,20 +75,3 @@ em {
   font-family: $font-family-heading;
   font-style: italic;
 }
-
-// -----------------------------------------------------------------------------
-// Utilidades tipográficas de marca
-// -----------------------------------------------------------------------------
-
-// Texto en oro pulido: degradado recortado sobre el glifo.
-.text-gold {
-  background: linear-gradient(
-    100deg,
-    $color-primary-light 0%,
-    $color-primary 48%,
-    $color-primary-dark 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}

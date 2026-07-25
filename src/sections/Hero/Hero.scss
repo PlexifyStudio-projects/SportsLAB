@@ -126,14 +126,6 @@
     animation: hero-pulse 1.6s ease-out infinite;
   }
 
-  &__eyebrow {
-    font-size: $font-size-sm;
-    font-weight: $font-weight-semibold;
-    text-transform: uppercase;
-    letter-spacing: 0.32em;
-    color: $color-text-muted;
-  }
-
   // Titular de portada. Se mantiene en la escala original (no la agresiva de
   // 5,2rem): a pantalla completa ocupaba demasiado y dejaba fuera del primer
   // golpe de vista los CTA y la prueba social, que es lo que tiene que verse.

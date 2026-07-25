@@ -18,32 +18,12 @@
   padding-inline: $gutter;
 }
 
-// -- Centrado con flexbox ----------------------------------------------------
-@mixin flex-center($direction: row, $gap: 0) {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: $direction;
-
-  @if $gap != 0 {
-    gap: $gap;
-  }
-}
-
 // -- Foco accesible visible --------------------------------------------------
 @mixin focus-ring($color: #4ade80) {
   &:focus-visible {
     outline: 2px solid $color;
     outline-offset: 2px;
   }
-}
-
-// -- Trunca el texto a N líneas ----------------------------------------------
-@mixin line-clamp($lines: 2) {
-  display: -webkit-box;
-  -webkit-line-clamp: $lines;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 // -- Oculta visualmente pero mantiene accesible para lectores de pantalla ----

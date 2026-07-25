@@ -6,12 +6,3 @@
 export function formatOdd(value) {
   return Number(value).toFixed(2);
 }
-
-/**
- * Formatea un número entero con separador de miles local (es-ES).
- * @param {number} value
- * @returns {string}
- */
-export function formatCount(value) {
-  return new Intl.NumberFormat('es-CO').format(value);
-}

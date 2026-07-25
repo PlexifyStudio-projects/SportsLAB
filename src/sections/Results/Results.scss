@@ -13,20 +13,6 @@
   position: relative;
   padding-block: $space-2xl;
 
-  // Foco de luz cenital: da la sensación de escenario y despega las capturas
-  // del negro plano.
-  &__glow {
-    position: absolute;
-    top: 12%;
-    left: 50%;
-    z-index: 0;
-    width: min(1100px, 120%);
-    height: 620px;
-    transform: translateX(-50%);
-    pointer-events: none;
-    background: radial-gradient(50% 50% at 50% 50%, rgba(216, 180, 90, 0.13), transparent 68%);
-  }
-
   .container {
     position: relative;
     z-index: 1;
