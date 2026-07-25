@@ -5,12 +5,18 @@ import { fileURLToPath, URL } from 'node:url';
 // -----------------------------------------------------------------------------
 // Configuración de Vite — SportsLAB
 // - El servidor de desarrollo se sirve SIEMPRE en el puerto 5412 (strictPort).
-// - En build, la app se publica bajo el subpath del repo en GitHub Pages
-//   (https://plexifystudio-projects.github.io/SportsLAB/). En dev se sirve en la
-//   raíz para no ensuciar la URL local.
+// - Producción es Cloudflare Pages en https://abrahamsportslab.com/, es decir la
+//   raíz del dominio: por eso `base` es '/' por defecto.
+// - GitHub Pages sirve el sitio bajo /SportsLAB/, así que ese despliegue pasa
+//   DEPLOY_BASE=/SportsLAB/ (ver .github/workflows/deploy.yml). No se toca aquí
+//   para que Cloudflare no herede un subpath que allí daría 404 en todos los
+//   assets.
+// - La config se exporta como OBJETO, no como callback: Wrangler intenta leer
+//   este fichero de forma estática cuando no encuentra un wrangler.jsonc y con
+//   la forma `({ command }) => ({...})` falla con "Error parsing file".
 // -----------------------------------------------------------------------------
-export default defineConfig(({ command }) => ({
-  base: command === 'build' ? '/SportsLAB/' : '/',
+export default defineConfig({
+  base: process.env.DEPLOY_BASE ?? '/',
 
   plugins: [react()],
 
@@ -70,4 +76,4 @@ export default defineConfig(({ command }) => ({
       },
     },
   },
-}));
+});

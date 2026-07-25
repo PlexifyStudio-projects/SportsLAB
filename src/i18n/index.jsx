@@ -20,7 +20,7 @@ const HTML_LANG = { ES: 'es-CO', EN: 'en' };
 const OG_LOCALE = { ES: 'es_CO', EN: 'en_US' };
 
 /** URL canónica de cada idioma (debe coincidir con hreflang y sitemap.xml). */
-const SITE_URL = 'https://plexifystudio-projects.github.io/SportsLAB/';
+const SITE_URL = 'https://abrahamsportslab.com/';
 const CANONICAL = { ES: SITE_URL, EN: `${SITE_URL}?lang=en` };
 
 /**

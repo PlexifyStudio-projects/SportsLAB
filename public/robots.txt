@@ -1,10 +1,9 @@
 # SportsLAB — robots.txt
 #
-# AVISO: al ser un GitHub Pages de proyecto, este fichero se publica en
-# /SportsLAB/robots.txt y los rastreadores SOLO leen el de la raíz del dominio
-# (plexifystudio-projects.github.io/robots.txt), que no controlamos. Se mantiene
-# por si el sitio pasa a un dominio propio; mientras tanto, el sitemap hay que
-# enviarlo a mano desde Google Search Console y Bing Webmaster Tools.
+# El sitio de producción es https://abrahamsportslab.com/ (Cloudflare Pages), así
+# que este fichero se publica en la raíz del dominio y los rastreadores sí lo
+# leen. En el despliegue paralelo de GitHub Pages queda bajo /SportsLAB/ y se
+# ignora, que es lo deseable: ese despliegue no es el canónico.
 
 User-agent: *
 Allow: /
@@ -13,4 +12,4 @@ Allow: /
 # sin ellos Googlebot vería una página en blanco.
 Allow: /assets/
 
-Sitemap: https://plexifystudio-projects.github.io/SportsLAB/sitemap.xml
+Sitemap: https://abrahamsportslab.com/sitemap.xml
