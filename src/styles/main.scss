@@ -7,6 +7,7 @@
 // co-localizados junto a su .jsx (metodología por componente + BEM).
 // =============================================================================
 
-// Fuente (Inter) — servida localmente vía CDN de Google Fonts en index si se
-// desea. Aquí solo declaramos la cascada base.
+// Las fuentes (Playfair Display + Inter, autoalojadas) se importan desde
+// `main.jsx`: Sass no resuelve rutas de `node_modules` sin configuración extra,
+// y Vite sí lo hace de forma nativa con un import de JS.
 @use 'base';

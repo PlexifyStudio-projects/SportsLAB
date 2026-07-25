@@ -42,8 +42,12 @@ $space-2xl: 4rem; //   64px
 $space-3xl: 6rem; //   96px
 
 // -- Tipografía -------------------------------------------------------------
-$font-family-base: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-$font-family-heading: 'Inter', 'Segoe UI', system-ui, sans-serif;
+// Dos voces: serif de alto contraste para titulares (la marca) y sans neutra
+// para interfaz y cuerpo (la legibilidad). El contraste entre ambas es lo que
+// da el aire editorial de lujo.
+$font-family-base: 'Inter Variable', 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+$font-family-heading: 'Playfair Display Variable', 'Playfair Display', Georgia, 'Times New Roman',
+  serif;
 
 $font-size-xs: 0.75rem;
 $font-size-sm: 0.875rem;
@@ -59,8 +63,18 @@ $font-weight-medium: 500;
 $font-weight-semibold: 600;
 $font-weight-bold: 700;
 
+// La serif aguanta pesos altos sin emborronarse: los titulares usan 700-800
+// para que el contraste fino/grueso sea dramático.
+$font-weight-display: 800;
+
 $line-height-tight: 1.15;
 $line-height-base: 1.6;
+// Los titulares serif necesitan interlineado más cerrado y tracking negativo:
+// a tamaño grande, el espaciado por defecto los deja sueltos y flojos.
+$line-height-display: 1.02;
+$tracking-display: -0.022em;
+// Los "eyebrow" en versalitas piden justo lo contrario: mucho aire.
+$tracking-eyebrow: 0.24em;
 
 // -- Radios / bordes --------------------------------------------------------
 $radius-sm: 6px;

@@ -27,6 +27,9 @@
     overflow: hidden;
   }
 
+  // Gradación de color: bajamos la luz y desaturamos hacia el frío, para que
+  // el único color cálido de la escena sea el oro de la marca. Es el mismo
+  // truco de etalonaje que usa el cine para dirigir la mirada.
   &__bg-img {
     position: absolute;
     inset: 0;
@@ -34,7 +37,7 @@
     height: 100%;
     object-fit: cover;
     object-position: 72% center;
-    filter: brightness(0.82) contrast(1.06) saturate(1.02);
+    filter: brightness(0.62) contrast(1.16) saturate(0.72);
     will-change: transform;
   }
 
@@ -54,10 +57,22 @@
       radial-gradient(90% 120% at 0% 42%, rgba(216, 180, 90, 0.16), transparent 55%);
   }
 
+  // Luz volumétrica: un haz dorado que entra en diagonal desde arriba, como el
+  // foco de un estadio atravesando el polvo. Es lo que da "profundidad de aire"
+  // a la escena en vez de una foto plana con una capa oscura encima.
   &__bg-grain {
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at 50% 0%, rgba(216, 180, 90, 0.1), transparent 45%);
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(216, 180, 90, 0.1), transparent 45%),
+      linear-gradient(
+        104deg,
+        transparent 38%,
+        rgba(240, 216, 145, 0.07) 46%,
+        rgba(240, 216, 145, 0.11) 52%,
+        rgba(240, 216, 145, 0.05) 58%,
+        transparent 66%
+      );
     mix-blend-mode: screen;
   }
 
@@ -119,14 +134,17 @@
     color: $color-text-muted;
   }
 
+  // Titular de portada. Se mantiene en la escala original (no la agresiva de
+  // 5,2rem): a pantalla completa ocupaba demasiado y dejaba fuera del primer
+  // golpe de vista los CTA y la prueba social, que es lo que tiene que verse.
   &__title {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    font-size: clamp(2.1rem, 5vw, 3.8rem);
+    font-size: clamp(2rem, 4.6vw, 3.5rem);
     line-height: 1.04;
-    letter-spacing: -0.02em;
-    font-weight: $font-weight-bold;
+    letter-spacing: $tracking-display;
+    font-weight: $font-weight-display;
   }
 
   &__line {
@@ -177,9 +195,12 @@
   &__avatars {
     display: flex;
     align-items: center;
+    // Contexto 3D: los avatares se levantan hacia el espectador al pasar el cursor.
+    perspective: 600px;
   }
 
   &__avatar {
+    position: relative;
     display: grid;
     place-items: center;
     width: 38px;
@@ -190,9 +211,47 @@
     font-size: $font-size-xs;
     font-weight: $font-weight-bold;
     color: $color-accent-ink;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55);
+    transition:
+      transform $transition-base,
+      z-index 0s;
 
     &:not(:first-child) {
       margin-left: -12px;
+    }
+
+    &:hover {
+      z-index: 3;
+      transform: translateY(-6px) translateZ(28px) scale(1.08);
+    }
+
+    // Nombre del apostador: visible al pasar el cursor.
+    &-name {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      z-index: 4;
+      padding: 0.28rem 0.6rem;
+      border-radius: $radius-pill;
+      background: rgba(19, 19, 22, 0.94);
+      border: 1px solid rgba(216, 180, 90, 0.35);
+      box-shadow: $shadow-md;
+      font-size: $font-size-xs;
+      font-weight: $font-weight-semibold;
+      color: $color-primary-light;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translate(-50%, 6px);
+      pointer-events: none;
+      transition:
+        opacity $transition-fast,
+        transform $transition-base;
+    }
+
+    &:hover &-name,
+    &:focus-visible &-name {
+      opacity: 1;
+      transform: translate(-50%, 0);
     }
 
     &[data-i='2'] {

@@ -1,31 +1,31 @@
 import { useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
 
 import SectionHeader from '@components/ui/SectionHeader/SectionHeader.jsx';
 import Icon from '@components/ui/Icon/Icon.jsx';
 import { FEATURES } from '@data/features.js';
 import { useLang } from '@/i18n/index.jsx';
+import {
+  useGSAP,
+  cinematicReveal,
+  scrollDrift,
+  prefersReducedMotion,
+  rafThrottle,
+} from '@utils/motion.js';
 import './Features.scss';
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
-
-const REDUCE =
-  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-/** Inclinación 3D + spotlight que siguen al cursor. */
-function onCardMove(e) {
-  if (REDUCE) return;
-  const card = e.currentTarget;
-  const r = card.getBoundingClientRect();
-  const px = (e.clientX - r.left) / r.width;
-  const py = (e.clientY - r.top) / r.height;
-  card.style.setProperty('--rx', `${(0.5 - py) * 10}deg`);
-  card.style.setProperty('--ry', `${(px - 0.5) * 12}deg`);
-  card.style.setProperty('--mx', `${e.clientX - r.left}px`);
-  card.style.setProperty('--my', `${e.clientY - r.top}px`);
-}
+// Inclinación 3D + spotlight que siguen al cursor. Limitado a una escritura por
+// frame: un `mousemove` sin throttling dispara cientos de recálculos de estilo
+// por segundo para pintar, como mucho, 60 frames.
+const onCardMove = rafThrottle(({ currentTarget, clientX, clientY }) => {
+  if (prefersReducedMotion()) return;
+  const r = currentTarget.getBoundingClientRect();
+  const px = (clientX - r.left) / r.width;
+  const py = (clientY - r.top) / r.height;
+  currentTarget.style.setProperty('--rx', `${(0.5 - py) * 10}deg`);
+  currentTarget.style.setProperty('--ry', `${(px - 0.5) * 12}deg`);
+  currentTarget.style.setProperty('--mx', `${clientX - r.left}px`);
+  currentTarget.style.setProperty('--my', `${clientY - r.top}px`);
+});
 
 function onCardLeave(e) {
   const card = e.currentTarget;
@@ -43,15 +43,17 @@ export default function Features() {
 
   useGSAP(
     () => {
-      gsap.from('.features__inner', {
-        y: 42,
-        opacity: 0,
-        duration: 0.7,
-        ease: 'power3.out',
+      cinematicReveal('.features__inner', {
+        depth: 200,
+        tilt: 15,
+        y: 58,
         stagger: 0.1,
-        clearProps: 'transform,opacity',
-        scrollTrigger: { trigger: '.features__grid', start: 'top 80%', once: true },
+        trigger: '.features__grid',
+        start: 'top 85%',
       });
+
+      // Las tarjetas se desplazan a distinta velocidad: la rejilla respira.
+      scrollDrift('.features__card', { trigger: '.features__grid', spread: 38 });
     },
     { scope: rootRef },
   );

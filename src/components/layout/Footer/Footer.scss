@@ -121,8 +121,19 @@
     font-size: $font-size-sm;
     transition: color $transition-fast;
 
+    @include focus-ring;
+
     &:hover {
       color: $color-primary-light;
+    }
+
+    // Los documentos legales abren un modal: son <button>, no enlaces, pero
+    // deben verse exactamente igual que el resto de la columna.
+    &--button {
+      padding: 0;
+      text-align: left;
+      font: inherit;
+      color: $color-text-muted;
     }
   }
 
@@ -168,5 +179,27 @@
     font-size: $font-size-xs;
     color: $color-text-muted;
     margin: 0;
+  }
+
+  // -- Crédito del estudio: discreto, pero localizable --
+  &__credit {
+    margin: $space-sm 0 0;
+    font-size: $font-size-xs;
+    color: rgba(154, 154, 163, 0.65);
+  }
+
+  &__credit-link {
+    color: $color-text-muted;
+    border-bottom: 1px solid transparent;
+    transition:
+      color $transition-fast,
+      border-color $transition-fast;
+
+    @include focus-ring;
+
+    &:hover {
+      color: $color-primary-light;
+      border-color: rgba(216, 180, 90, 0.45);
+    }
   }
 }

@@ -20,31 +20,21 @@
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
   }
 
+  // El desplazamiento lo mueve GSAP (ver LiveMatches.jsx), no `@keyframes`.
+  // Motivo: Safari/macOS congela una animación CSS sobre una capa tan ancha
+  // (~50 tarjetas) cuando el padre lleva `mask-image`. GSAP va por rAF y no
+  // depende de esa capa, así que se mueve en todos los navegadores.
   &__track {
     display: flex;
     gap: $space-lg;
     width: max-content;
     padding-inline: $space-lg;
-    animation: live-scroll 90s linear infinite;
+    will-change: transform;
+    backface-visibility: hidden;
   }
 
   &__item {
     flex: 0 0 auto;
     width: 300px;
-  }
-}
-
-@keyframes live-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .live-matches__track {
-    animation: none;
   }
 }

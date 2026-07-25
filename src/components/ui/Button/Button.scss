@@ -13,17 +13,27 @@
   align-items: center;
   justify-content: center;
   gap: $space-sm;
-  padding: $space-sm $space-lg;
-  border-radius: $radius-md;
+  padding: 0.85rem $space-lg;
+  border-radius: $radius-pill;
   font-weight: $font-weight-semibold;
-  font-size: $font-size-base;
+  font-size: $font-size-sm;
   line-height: 1;
-  white-space: nowrap;
+  // Versalitas espaciadas: el botón deja de parecer un control de interfaz y
+  // pasa a leerse como una llamada de marca.
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-align: center;
+  // El texto puede partirse: en móvil, etiquetas largas como "Quiero mi 20% de
+  // descuento" con `nowrap` desbordaban la tarjeta y se salían de pantalla.
+  text-wrap: balance;
+  // Nunca más ancho que su contenedor, pase lo que pase con la etiqueta.
+  max-width: 100%;
   background: var(--_bg);
   color: var(--_fg);
   transition:
-    transform $transition-fast,
+    transform 320ms cubic-bezier(0.16, 1, 0.3, 1),
     filter $transition-fast,
+    box-shadow 320ms cubic-bezier(0.16, 1, 0.3, 1),
     background $transition-fast;
 
   @include focus-ring;
@@ -35,12 +45,12 @@
   }
 
   &:hover {
-    filter: brightness(1.08);
-    transform: translateY(-2px);
+    filter: brightness(1.06);
+    transform: translateY(-3px);
   }
 
   &:active {
-    transform: translateY(0);
+    transform: translateY(-1px);
   }
 
   // -- Variantes --
@@ -74,10 +84,19 @@
     animation: button-shine 4.5s ease-in-out infinite;
   }
 
+  // Secundario "de galería": casi transparente, definido solo por un filete
+  // dorado. Acompaña al principal sin competir con él.
   &--secondary {
-    --_bg: #{$color-surface-2};
-    --_fg: #{$color-text};
-    border: 1px solid $color-border;
+    --_bg: rgba(255, 255, 255, 0.03);
+    --_fg: #{$color-heading};
+    border: 1px solid rgba(216, 180, 90, 0.35);
+    backdrop-filter: blur(10px);
+
+    &:hover {
+      --_bg: rgba(216, 180, 90, 0.1);
+      border-color: rgba(216, 180, 90, 0.7);
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.5);
+    }
   }
 
   &--ghost {
@@ -91,8 +110,17 @@
 
   // -- Tamaños --
   &--lg {
-    padding: $space-md $space-xl;
-    font-size: $font-size-lg;
+    padding: 1.1rem $space-lg;
+    font-size: $font-size-sm;
+    letter-spacing: 0.1em;
+
+    // El tracking amplio solo cuando hay sitio de sobra: en móvil es lo que
+    // hacía crecer el botón por encima del ancho de su tarjeta.
+    @include respond-to('md') {
+      padding: 1.1rem $space-xl;
+      font-size: $font-size-base;
+      letter-spacing: 0.12em;
+    }
   }
 
   // -- Modificadores --

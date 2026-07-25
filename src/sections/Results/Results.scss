@@ -10,7 +10,27 @@
 }
 
 .results {
+  position: relative;
   padding-block: $space-2xl;
+
+  // Foco de luz cenital: da la sensación de escenario y despega las capturas
+  // del negro plano.
+  &__glow {
+    position: absolute;
+    top: 12%;
+    left: 50%;
+    z-index: 0;
+    width: min(1100px, 120%);
+    height: 620px;
+    transform: translateX(-50%);
+    pointer-events: none;
+    background: radial-gradient(50% 50% at 50% 50%, rgba(216, 180, 90, 0.13), transparent 68%);
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+  }
 
   &__carousel {
     position: relative;
@@ -18,13 +38,16 @@
     user-select: none;
   }
 
+  // Escena: perspectiva profunda y punto de fuga algo por encima del centro,
+  // como un plano de cine ligeramente contrapicado.
   &__stage {
     position: relative;
-    height: 380px;
+    height: 260px;
     display: flex;
     align-items: center;
     justify-content: center;
-    perspective: 1500px;
+    perspective: 1800px;
+    perspective-origin: 50% 42%;
     touch-action: pan-y;
     cursor: grab;
 
@@ -33,57 +56,68 @@
     }
 
     @include respond-to('md') {
-      height: 460px;
+      height: 400px;
+    }
+
+    @include respond-to('lg') {
+      height: 500px;
     }
   }
 
-  // -- Diapositiva (solo posición 3D) --
+  // -- Diapositiva: capturas APAISADAS, mucho más anchas que altas --
   &__slide {
     position: absolute;
-    width: 210px;
-    height: 330px;
+    width: min(90vw, 340px);
     margin: 0;
     transform-style: preserve-3d;
-    transform: translateX(calc(var(--pos) * 84%)) translateZ(calc(var(--abs) * -200px))
-      rotateY(calc(var(--pos) * -34deg)) scale(calc(1 - var(--abs) * 0.13));
-    opacity: max(0.14, calc(1 - var(--abs) * 0.32));
+    // Menos recorrido lateral que en un coverflow vertical: las tarjetas son
+    // anchas y se solaparían demasiado.
+    transform: translateX(calc(var(--pos) * 46%)) translateZ(calc(var(--abs) * -280px))
+      rotateY(calc(var(--pos) * -26deg)) scale(calc(1 - var(--abs) * 0.06));
+    opacity: max(0.1, calc(1 - var(--abs) * 0.42));
     transition:
-      transform 660ms cubic-bezier(0.16, 1, 0.3, 1),
-      opacity 520ms ease;
+      transform 720ms cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 560ms ease;
     will-change: transform, opacity;
     cursor: pointer;
 
     @include respond-to('md') {
-      width: 270px;
-      height: 420px;
+      width: min(78vw, 560px);
     }
 
-    // La activa salta hacia el usuario (efecto 4D).
+    @include respond-to('lg') {
+      width: 660px;
+    }
+
+    // La activa se adelanta hacia el espectador.
     &.is-active {
       cursor: default;
-      transform: translateZ(90px) scale(1.06);
+      transform: translateZ(120px);
     }
   }
 
-  // -- Tarjeta (flota continuamente) --
+  // -- Marco del recibo --
+  // Las capturas son de fondo blanco: el marco es blanco también, así el
+  // `contain` de imágenes de distinta altura no deja bandas visibles.
   &__card {
-    position: absolute;
-    inset: 0;
+    position: relative;
     border-radius: $radius-lg;
     overflow: hidden;
-    background: $color-surface;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: $shadow-lg;
-    animation: results-float 5.5s ease-in-out infinite;
-    animation-delay: calc(var(--i) * -0.9s);
+    background: #fff;
+    box-shadow:
+      0 40px 80px rgba(0, 0, 0, 0.75),
+      0 0 0 1px rgba(216, 180, 90, 0.22);
   }
 
   &__slide.is-active &__card {
     box-shadow:
-      $shadow-lg,
-      0 0 60px rgba(216, 180, 90, 0.28);
+      0 50px 100px rgba(0, 0, 0, 0.8),
+      0 0 90px rgba(216, 180, 90, 0.3),
+      0 0 0 1px rgba(216, 180, 90, 0.45);
 
-    // Spotlight que sigue el cursor.
+    // Reflejo dorado que sigue el cursor. Sobre fondo BLANCO `screen` no se ve
+    // (blanco + cualquier cosa = blanco): aquí se usa `multiply`, que oscurece
+    // hacia el oro y sí lee sobre la captura.
     &::before {
       content: '';
       position: absolute;
@@ -91,11 +125,11 @@
       z-index: 1;
       pointer-events: none;
       background: radial-gradient(
-        200px circle at var(--mx, 50%) var(--my, 50%),
-        rgba(216, 180, 90, 0.28),
-        transparent 55%
+        320px circle at var(--mx, 50%) var(--my, 50%),
+        rgba(216, 180, 90, 0.22),
+        transparent 60%
       );
-      mix-blend-mode: screen;
+      mix-blend-mode: multiply;
     }
 
     // Borde con gradiente dorado que gira.
@@ -119,15 +153,26 @@
       mask-composite: exclude;
       pointer-events: none;
       animation: res-border 5s linear infinite;
+
+      // Igual que en Stats: el `conic-gradient` animado + `mask-composite` se
+      // re-rasteriza en cada frame. En móvil se congela el barrido.
+      @media (pointer: coarse) {
+        animation: none;
+      }
     }
   }
 
+  // Las capturas van de 1320x438 a 1320x890. Con una relación fija y `contain`
+  // todas se ven completas, sin recortar importes ni cuotas; el sobrante queda
+  // en blanco sobre el marco blanco, así que no se nota.
   &__img {
     display: block;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: top;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: contain;
+    object-position: center;
+    background: #fff;
     -webkit-user-drag: none;
   }
 
@@ -241,22 +286,9 @@
   }
 }
 
-@keyframes results-float {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-0.5deg);
-  }
-  50% {
-    transform: translateY(-12px) rotate(0.5deg);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .results__slide {
     transition: none;
-  }
-  .results__card {
-    animation: none;
   }
   .results__slide.is-active .results__card::after {
     animation: none;

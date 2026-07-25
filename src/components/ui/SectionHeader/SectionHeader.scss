@@ -8,7 +8,9 @@
   flex-direction: column;
   gap: $space-sm;
   margin-bottom: $space-xl;
-  max-width: 640px;
+  max-width: 680px;
+  // Escena 3D compartida por las tres líneas del encabezado.
+  perspective: 1200px;
 
   &--center {
     align-items: center;
@@ -17,16 +19,72 @@
   }
 
   &__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-sm;
+    // El antetítulo se queda en la sans: en versalitas muy espaciadas, una
+    // serif de alto contraste pierde los trazos finos y se ve sucia.
+    font-family: $font-family-base;
     color: $color-primary;
     font-weight: $font-weight-semibold;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: $font-size-sm;
+    letter-spacing: $tracking-eyebrow;
+    font-size: $font-size-xs;
     margin: 0;
   }
 
+  // Filete dorado que acompaña al antetítulo.
+  &__eyebrow-rule {
+    width: 34px;
+    height: 1px;
+    flex-shrink: 0;
+    background: linear-gradient(90deg, transparent, $color-primary);
+  }
+
+  // -- Titular: serif de alto contraste, degradado blanco→oro con brillo --
+  // El tamaño lo pone la escala fluida global (base/_typography): aquí solo se
+  // define el tratamiento de color.
+  &__title {
+    position: relative;
+    background: linear-gradient(
+      100deg,
+      $color-heading 0%,
+      $color-heading 42%,
+      $color-primary-light 62%,
+      $color-primary 82%
+    );
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: section-title-shine 9s ease-in-out infinite;
+  }
+
   &__subtitle {
-    font-size: $font-size-lg;
+    font-size: clamp($font-size-base, 1.5vw, $font-size-lg);
+    line-height: 1.65;
+    color: $color-text-muted;
     margin: 0;
+  }
+
+  &--center &__subtitle {
+    margin-inline: auto;
+  }
+}
+
+// El brillo recorre el degradado del titular muy despacio (efecto "oro pulido").
+@keyframes section-title-shine {
+  0%,
+  100% {
+    background-position: 100% 50%;
+  }
+  50% {
+    background-position: 0% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-header__title {
+    animation: none;
   }
 }

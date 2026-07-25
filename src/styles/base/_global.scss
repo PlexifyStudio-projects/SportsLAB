@@ -14,10 +14,37 @@ html {
 
 body {
   overflow-x: clip;
+  background: $color-bg;
+}
+
+// Safari < 16 no soporta `overflow: clip`: descarta la declaración y aparece
+// scroll horizontal. Ahí sí usamos `hidden`, pero solo en `body` para no
+// romper el `position: sticky` de la cabecera.
+@supports not (overflow-x: clip) {
+  html {
+    overflow-x: visible;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+}
+
+// Veladura dorada de fondo.
+// Antes se resolvía con `background-attachment: fixed` en `body`, pero en Safari
+// (macOS) eso fuerza un repintado del fondo en cada frame de scroll y, junto a
+// los `backdrop-filter` y `mix-blend-mode` de las secciones, provoca parpadeos y
+// bloques que desaparecen. Una capa `position: fixed` propia es equivalente
+// visualmente y se compone en GPU sin efectos secundarios.
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
   background:
     radial-gradient(1100px 560px at 82% -14%, rgba(216, 180, 90, 0.18), transparent 62%),
-    radial-gradient(760px 480px at -8% 4%, rgba(216, 180, 90, 0.06), transparent 55%), $color-bg;
-  background-attachment: fixed;
+    radial-gradient(760px 480px at -8% 4%, rgba(216, 180, 90, 0.06), transparent 55%);
 }
 
 // Scrollbar temática (Chromium / WebKit).
@@ -39,6 +66,95 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: $color-primary;
+}
+
+// -----------------------------------------------------------------------------
+// Capa cinematográfica: viñeta + grano de película sobre toda la página.
+// Va por encima del contenido pero es totalmente transparente al puntero, así
+// que no interfiere con ningún clic. Da el acabado "de cine" sin tocar cada
+// sección por separado.
+// -----------------------------------------------------------------------------
+.cinematic-grade {
+  position: fixed;
+  inset: 0;
+  z-index: $z-overlay - 1;
+  pointer-events: none;
+  // Viñeta: oscurece las esquinas y centra la mirada.
+  background: radial-gradient(120% 90% at 50% 50%, transparent 52%, rgba(0, 0, 0, 0.55) 100%);
+  // Aísla la capa: el navegador no necesita comprobar si el grano afecta al
+  // resto del árbol en cada frame de la animación.
+  contain: strict;
+
+  // Grano: textura fina que rompe las bandas de los degradados en pantallas
+  // grandes (banding muy visible sobre negro en paneles de portátil).
+  &::after {
+    content: '';
+    position: absolute;
+    // Antes `inset: -50%` (capa de 2x2 = 4 viewports). El keyframe solo desplaza
+    // un ±4%, así que con un 6% de margen sobra y la textura que el compositor
+    // debe rasterizar pasa de ~4x a ~1,25x el viewport (-70% de memoria de GPU).
+    inset: -6%;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+    // `will-change` promueve la capa una sola vez, de forma que los 4 pasos por
+    // segundo se resuelven en el compositor y NO repintan la pantalla completa.
+    will-change: transform;
+    animation: cinematic-grain 700ms steps(4) infinite;
+  }
+}
+
+@keyframes cinematic-grain {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-4%, 3%);
+  }
+  50% {
+    transform: translate(3%, -4%);
+  }
+  75% {
+    transform: translate(-3%, -2%);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+// En móvil/tablet el grano no se aprecia (densidad de píxel alta, pantalla
+// pequeña) pero sí cuesta batería y memoria de GPU, que es justo donde menos
+// hay. Se deja la viñeta, que es estática y gratis.
+@media (max-width: (breakpoint('lg') - 1px)), (pointer: coarse) {
+  .cinematic-grade::after {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cinematic-grade::after {
+    animation: none;
+    will-change: auto;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Transición entre escenas
+// -----------------------------------------------------------------------------
+// Filete dorado que se desvanece hacia los lados, para separar secciones sin
+// meter una línea dura que rompa la continuidad del negro.
+.scene-divider {
+  width: min(1100px, 88%);
+  height: 1px;
+  margin-inline: auto;
+  border: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(216, 180, 90, 0.28) 30%,
+    rgba(216, 180, 90, 0.45) 50%,
+    rgba(216, 180, 90, 0.28) 70%,
+    transparent
+  );
 }
 
 // Contenedor reutilizable como clase utilitaria.

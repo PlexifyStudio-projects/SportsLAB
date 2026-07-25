@@ -6,6 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0a0a0b" />
 
+    <!-- Rendimiento: la foto de fondo del hero es el elemento LCP. Al declararla
+         aquí, el navegador la pide junto al HTML en lugar de esperar a que se
+         descargue, parsee y ejecute el bundle de React. Vite reescribe el `href`
+         al nombre con hash del build. -->
+    <link
+      rel="preload"
+      as="image"
+      href="/src/assets/images/tennis-hero-1.jpg"
+      fetchpriority="high"
+    />
+
     <!-- SEO principal -->
     <title>Pronósticos de tenis en Colombia | AbrahamSportsLAB — Apuestas ATP, WTA y Grand Slams</title>
     <meta
@@ -17,7 +28,10 @@
       content="pronósticos de tenis, apuestas de tenis, tips de tenis, picks de tenis, apuestas ATP, apuestas WTA, Grand Slams, Masters 1000, pronósticos tenis Colombia, tipster tenis, canal de Telegram tenis, gestión de bankroll"
     />
     <meta name="author" content="AbrahamSportsLAB" />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
     <link rel="canonical" href="https://plexifystudio-projects.github.io/SportsLAB/" />
 
     <!-- Hreflang alternates -->
@@ -44,6 +58,9 @@
       content="Picks diarios de ATP, WTA y Grand Slams, cuotas y gestión de bankroll directo a tu Telegram. 82% de efectividad registrada."
     />
     <meta property="og:image" content="https://plexifystudio-projects.github.io/SportsLAB/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1920" />
+    <meta property="og:image:height" content="1281" />
     <meta property="og:image:alt" content="Jugador de tenis — pronósticos de AbrahamSportsLAB" />
 
     <!-- Twitter -->
@@ -55,81 +72,150 @@
     />
     <meta name="twitter:image" content="https://plexifystudio-projects.github.io/SportsLAB/og-image.jpg" />
 
-    <!-- Datos estructurados -->
+    <!--
+      Datos estructurados. Un único grafo (@graph) con nodos enlazados por @id:
+      Organization ← WebSite ← WebPage, más el servicio y la navegación real del
+      sitio. Así Google no ve entidades duplicadas y sueltas.
+      Nota: es una landing de una sola URL, por eso NO se declara BreadcrumbList
+      (los anclajes #seccion no son páginas y Google los ignora o los marca mal).
+    -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "ProfessionalService",
-        "name": "AbrahamSportsLAB",
-        "description": "Pronósticos de tenis con análisis profesionales: picks diarios de ATP, WTA, Grand Slams y Masters 1000, cuotas y gestión de bankroll por Telegram.",
-        "url": "https://plexifystudio-projects.github.io/SportsLAB/",
-        "logo": "https://plexifystudio-projects.github.io/SportsLAB/favicon.svg",
-        "image": "https://plexifystudio-projects.github.io/SportsLAB/og-image.jpg",
-        "areaServed": "CO",
-        "sameAs": ["https://t.me/abrahamsportslab"],
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "4.9",
-          "bestRating": "5",
-          "ratingCount": "2000"
-        }
-      }
-    </script>
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "AbrahamSportsLAB",
-        "alternateName": "SportsLAB",
-        "url": "https://plexifystudio-projects.github.io/SportsLAB/",
-        "inLanguage": "es-CO",
-        "description": "Pronósticos de tenis con análisis profesionales en Colombia: picks diarios de ATP, WTA, Grand Slams y Masters 1000 por Telegram.",
-        "publisher": {
-          "@type": "Organization",
-          "name": "AbrahamSportsLAB",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://plexifystudio-projects.github.io/SportsLAB/favicon.svg"
-          }
-        }
-      }
-    </script>
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
+        "@graph": [
           {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Inicio",
-            "item": "https://plexifystudio-projects.github.io/SportsLAB/"
+            "@type": "Organization",
+            "@id": "https://plexifystudio-projects.github.io/SportsLAB/#organizacion",
+            "name": "AbrahamSportsLAB",
+            "alternateName": "SportsLAB",
+            "url": "https://plexifystudio-projects.github.io/SportsLAB/",
+            "email": "abrahamsportslab@gmail.com",
+            "logo": {
+              "@type": "ImageObject",
+              "@id": "https://plexifystudio-projects.github.io/SportsLAB/#logo",
+              "url": "https://plexifystudio-projects.github.io/SportsLAB/favicon.svg",
+              "contentUrl": "https://plexifystudio-projects.github.io/SportsLAB/favicon.svg",
+              "caption": "AbrahamSportsLAB"
+            },
+            "image": { "@id": "https://plexifystudio-projects.github.io/SportsLAB/#logo" },
+            "sameAs": ["https://t.me/abrahamsportslab"]
           },
           {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Cómo funciona",
-            "item": "https://plexifystudio-projects.github.io/SportsLAB/#como-funciona"
+            "@type": "WebSite",
+            "@id": "https://plexifystudio-projects.github.io/SportsLAB/#sitio",
+            "name": "AbrahamSportsLAB",
+            "alternateName": "SportsLAB",
+            "url": "https://plexifystudio-projects.github.io/SportsLAB/",
+            "inLanguage": "es-CO",
+            "description": "Pronósticos de tenis con análisis profesionales en Colombia: picks diarios de ATP, WTA, Grand Slams y Masters 1000 por Telegram.",
+            "publisher": { "@id": "https://plexifystudio-projects.github.io/SportsLAB/#organizacion" }
           },
           {
-            "@type": "ListItem",
-            "position": 3,
-            "name": "Resultados",
-            "item": "https://plexifystudio-projects.github.io/SportsLAB/#resultados"
+            "@type": "WebPage",
+            "@id": "https://plexifystudio-projects.github.io/SportsLAB/#pagina",
+            "url": "https://plexifystudio-projects.github.io/SportsLAB/",
+            "name": "Pronósticos de tenis en Colombia | AbrahamSportsLAB",
+            "description": "Pronósticos de tenis con análisis profesionales en Colombia. Picks diarios de ATP, WTA, Grand Slams y Masters 1000, cuotas y gestión de bankroll directo a tu Telegram.",
+            "isPartOf": { "@id": "https://plexifystudio-projects.github.io/SportsLAB/#sitio" },
+            "about": { "@id": "https://plexifystudio-projects.github.io/SportsLAB/#servicio" },
+            "primaryImageOfPage": {
+              "@type": "ImageObject",
+              "url": "https://plexifystudio-projects.github.io/SportsLAB/og-image.jpg"
+            },
+            "inLanguage": "es-CO"
           },
           {
-            "@type": "ListItem",
-            "position": 4,
-            "name": "Registro",
-            "item": "https://plexifystudio-projects.github.io/SportsLAB/#registro"
+            "@type": "ProfessionalService",
+            "@id": "https://plexifystudio-projects.github.io/SportsLAB/#servicio",
+            "name": "AbrahamSportsLAB",
+            "description": "Pronósticos de tenis con análisis profesionales: picks diarios de ATP, WTA, Grand Slams y Masters 1000, cuotas y gestión de bankroll por Telegram.",
+            "url": "https://plexifystudio-projects.github.io/SportsLAB/",
+            "logo": { "@id": "https://plexifystudio-projects.github.io/SportsLAB/#logo" },
+            "image": "https://plexifystudio-projects.github.io/SportsLAB/og-image.jpg",
+            "parentOrganization": {
+              "@id": "https://plexifystudio-projects.github.io/SportsLAB/#organizacion"
+            },
+            "areaServed": { "@type": "Country", "name": "Colombia" },
+            "availableLanguage": [
+              { "@type": "Language", "name": "Español", "alternateName": "es" },
+              { "@type": "Language", "name": "English", "alternateName": "en" }
+            ],
+            "knowsAbout": [
+              "Pronósticos de tenis",
+              "Apuestas deportivas",
+              "ATP",
+              "WTA",
+              "Grand Slams",
+              "Masters 1000",
+              "Gestión de bankroll"
+            ],
+            "sameAs": ["https://t.me/abrahamsportslab"],
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "4.9",
+              "bestRating": "5",
+              "worstRating": "1",
+              "ratingCount": "2000"
+            }
+          },
+          {
+            "@type": "ItemList",
+            "@id": "https://plexifystudio-projects.github.io/SportsLAB/#secciones",
+            "name": "Secciones de la página",
+            "itemListElement": [
+              {
+                "@type": "SiteNavigationElement",
+                "position": 1,
+                "name": "En vivo",
+                "url": "https://plexifystudio-projects.github.io/SportsLAB/#en-vivo"
+              },
+              {
+                "@type": "SiteNavigationElement",
+                "position": 2,
+                "name": "Cómo funciona",
+                "url": "https://plexifystudio-projects.github.io/SportsLAB/#como-funciona"
+              },
+              {
+                "@type": "SiteNavigationElement",
+                "position": 3,
+                "name": "Torneos",
+                "url": "https://plexifystudio-projects.github.io/SportsLAB/#torneos"
+              },
+              {
+                "@type": "SiteNavigationElement",
+                "position": 4,
+                "name": "Resultados",
+                "url": "https://plexifystudio-projects.github.io/SportsLAB/#resultados"
+              },
+              {
+                "@type": "SiteNavigationElement",
+                "position": 5,
+                "name": "Ventajas",
+                "url": "https://plexifystudio-projects.github.io/SportsLAB/#ventajas"
+              },
+              {
+                "@type": "SiteNavigationElement",
+                "position": 6,
+                "name": "Registro",
+                "url": "https://plexifystudio-projects.github.io/SportsLAB/#registro"
+              }
+            ]
           }
         ]
       }
     </script>
+    <!--
+      FAQPage: OJO — Google exige que estas preguntas y respuestas estén VISIBLES
+      en la página. Hoy no existe una sección de preguntas frecuentes en la
+      landing, así que este bloque debe eliminarse o publicarse su contenido.
+    -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "FAQPage",
+        "@id": "https://plexifystudio-projects.github.io/SportsLAB/#faq",
+        "isPartOf": { "@id": "https://plexifystudio-projects.github.io/SportsLAB/#pagina" },
+        "inLanguage": "es-CO",
         "mainEntity": [
           {
             "@type": "Question",

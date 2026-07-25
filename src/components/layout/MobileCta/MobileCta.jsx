@@ -11,7 +11,7 @@ export default function MobileCta() {
   const { t } = useLang();
 
   return (
-    <div className="mobile-cta" role="region" aria-label="Acciones rápidas">
+    <div className="mobile-cta" role="region" aria-label={t('a11y.quickActions')}>
       <Button as="a" href="#como-funciona" variant="secondary" className="mobile-cta__button">
         {t('mobile.how')}
       </Button>

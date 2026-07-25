@@ -114,6 +114,14 @@
         mask-composite: exclude;
         pointer-events: none;
         animation: stats-border 6s linear infinite;
+
+        // Un `conic-gradient` animado con `@property` se re-rasteriza en CADA
+        // frame, y encima lleva `mask-composite` (pase de composición extra).
+        // En móvil eso es un coste continuo que la GPU no puede permitirse: se
+        // deja el borde dorado quieto, que visualmente casi no cambia.
+        @media (pointer: coarse) {
+          animation: none;
+        }
       }
     }
   }
@@ -127,8 +135,9 @@
   }
 
   &__title {
-    font-size: clamp(1.7rem, 3.2vw, 2.5rem);
-    line-height: 1.1;
+    font-size: clamp(2rem, 3.6vw, 2.9rem);
+    line-height: 1.03;
+    letter-spacing: $tracking-display;
     color: $color-heading;
   }
 
@@ -176,19 +185,29 @@
     color: $color-primary;
   }
 
+  // Las cifras van en la serif: los números de Playfair tienen un contraste de
+  // trazo que convierte un dato en una pieza editorial. Es el detalle que más
+  // separa este bento de una tarjeta de dashboard cualquiera.
   &__value {
     display: inline-flex;
     align-items: baseline;
     margin-top: auto;
-    font-size: clamp(1.7rem, 3vw, 2.3rem);
-    font-weight: $font-weight-bold;
-    line-height: 1;
-    letter-spacing: -0.03em;
+    font-family: $font-family-heading;
+    font-size: clamp(2.4rem, 4.4vw, 3.6rem);
+    font-weight: $font-weight-display;
+    line-height: 0.95;
+    letter-spacing: -0.035em;
     font-variant-numeric: tabular-nums;
     background: linear-gradient(120deg, $color-primary-light, $color-primary 55%, $color-primary-dark);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+  }
+
+  // Los afijos (+ , %) más pequeños: la cifra manda.
+  &__affix {
+    font-size: 0.62em;
+    opacity: 0.85;
   }
 
   &__stars {

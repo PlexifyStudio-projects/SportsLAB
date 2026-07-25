@@ -3,25 +3,29 @@ import { useEffect, useRef, useState } from 'react';
 import SectionHeader from '@components/ui/SectionHeader/SectionHeader.jsx';
 import Icon from '@components/ui/Icon/Icon.jsx';
 import { useLang } from '@/i18n/index.jsx';
+import { useInView } from '@hooks/useInView.js';
+import { gsap, useGSAP, cinematicReveal, rafThrottle, prefersReducedMotion } from '@utils/motion.js';
 
-import bet1 from '@assets/images/6.jpeg';
-import bet2 from '@assets/images/7.jpeg';
-import bet3 from '@assets/images/8.jpeg';
-import bet4 from '@assets/images/9.jpeg';
-import bet5 from '@assets/images/10.jpeg';
+import bet1 from '@assets/images/11.jpeg';
+import bet2 from '@assets/images/12.jpeg';
+import bet3 from '@assets/images/13.jpeg';
+import bet4 from '@assets/images/14.jpeg';
+import bet5 from '@assets/images/15.jpeg';
 
 import './Results.scss';
 
+// Capturas reales de cupones ganados. Son APAISADAS y de fondo claro, así que
+// se presentan como recibos flotando sobre el negro, no como pósters verticales.
 const PROOFS = [bet1, bet2, bet3, bet4, bet5];
 const N = PROOFS.length;
 
-/** Spotlight que sigue el cursor sobre la tarjeta activa. */
-function onSlideMove(e) {
-  const el = e.currentTarget;
-  const r = el.getBoundingClientRect();
-  el.style.setProperty('--mx', `${e.clientX - r.left}px`);
-  el.style.setProperty('--my', `${e.clientY - r.top}px`);
-}
+// Spotlight que sigue el cursor sobre la tarjeta activa, limitado a una
+// escritura por frame (`rafThrottle`).
+const onSlideMove = rafThrottle(({ currentTarget, clientX, clientY }) => {
+  const r = currentTarget.getBoundingClientRect();
+  currentTarget.style.setProperty('--mx', `${clientX - r.left}px`);
+  currentTarget.style.setProperty('--my', `${clientY - r.top}px`);
+});
 
 /**
  * Results — Carrusel 3D "coverflow" de apuestas ganadas: autoplay, arrastre,
@@ -30,15 +34,55 @@ function onSlideMove(e) {
 export default function Results() {
   const { t } = useLang();
   const [active, setActive] = useState(0);
+  const rootRef = useRef(null);
   const drag = useRef({ x: 0, active: false });
 
   const go = (dir) => setActive((a) => (a + dir + N) % N);
 
-  // Autoplay continuo (el carrusel siempre se mueve).
+  useGSAP(
+    () => {
+      cinematicReveal('.results__carousel', {
+        depth: 300,
+        tilt: 14,
+        y: 60,
+        duration: 1.2,
+        start: 'top 88%',
+      });
+
+      // La escena bascula suavemente con el scroll: al entrar se ve algo desde
+      // abajo y al salir desde arriba, como una cámara que pasa por delante.
+      if (!prefersReducedMotion()) {
+        gsap.fromTo(
+          '.results__stage',
+          { rotateX: 7 },
+          {
+            rotateX: -5,
+            ease: 'none',
+            transformPerspective: 1800,
+            scrollTrigger: {
+              trigger: rootRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 1,
+              invalidateOnRefresh: true,
+            },
+          },
+        );
+      }
+    },
+    { scope: rootRef },
+  );
+
+  // Autoplay continuo mientras el carrusel se ve. Fuera de pantalla o con la
+  // pestaña en segundo plano se detiene: cada avance re-renderiza 5 slides y
+  // dispara transiciones 3D de 660 ms que nadie estaba mirando.
+  const inView = useInView(rootRef);
+
   useEffect(() => {
+    if (!inView) return undefined;
     const id = setInterval(() => setActive((a) => (a + 1) % N), 3800);
     return () => clearInterval(id);
-  }, []);
+  }, [inView]);
 
   const onPointerDown = (e) => {
     drag.current = { x: e.clientX, active: true };
@@ -52,7 +96,7 @@ export default function Results() {
   };
 
   return (
-    <section className="results" id="resultados">
+    <section className="results" id="resultados" ref={rootRef}>
       <div className="container">
         <SectionHeader
           align="center"
@@ -78,9 +122,11 @@ export default function Results() {
                 <figure
                   key={src}
                   className={`results__slide ${isActive ? 'is-active' : ''}`}
-                  style={{ '--pos': pos, '--abs': abs, '--i': i, zIndex: 10 - abs }}
+                  style={{ '--pos': pos, '--abs': abs, zIndex: 10 - abs }}
                   onClick={() => !isActive && setActive(i)}
                   onMouseMove={isActive ? onSlideMove : undefined}
+                  // Las capturas del fondo no deben recibir foco de teclado.
+                  inert={!isActive || undefined}
                 >
                   <div className="results__card">
                     <span className="results__badge">
@@ -89,8 +135,11 @@ export default function Results() {
                     <img
                       className="results__img"
                       src={src}
-                      alt={`Apuesta ganada ${i + 1}`}
+                      alt={t('results.alt')(i + 1, N)}
+                      width="1320"
+                      height="887"
                       loading="lazy"
+                      decoding="async"
                       draggable="false"
                     />
                   </div>
@@ -102,7 +151,7 @@ export default function Results() {
           <button
             className="results__nav results__nav--prev"
             type="button"
-            aria-label="Anterior"
+            aria-label={t('a11y.prevProof')}
             onClick={() => go(-1)}
           >
             <Icon name="arrow-left" size={20} />
@@ -110,21 +159,24 @@ export default function Results() {
           <button
             className="results__nav results__nav--next"
             type="button"
-            aria-label="Siguiente"
+            aria-label={t('a11y.nextProof')}
             onClick={() => go(1)}
           >
             <Icon name="arrow-right" size={20} />
           </button>
         </div>
 
-        <div className="results__dots" role="tablist" aria-label="Apuestas ganadas">
+        {/* `role="tablist"` exigiría `role="tab"` + panel asociado en cada botón:
+            como aquí solo son atajos del carrusel, un grupo con `aria-current`
+            es el patrón correcto y válido. */}
+        <div className="results__dots" role="group" aria-label={t('a11y.proofs')}>
           {PROOFS.map((src, i) => (
             <button
               key={src}
               type="button"
               className={`results__dot ${i === active ? 'is-active' : ''}`}
-              aria-label={`Ir a la apuesta ${i + 1}`}
-              aria-selected={i === active}
+              aria-label={t('a11y.goToProof')(i + 1)}
+              aria-current={i === active || undefined}
               onClick={() => setActive(i)}
             />
           ))}

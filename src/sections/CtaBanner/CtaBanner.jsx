@@ -1,8 +1,11 @@
+import { useRef } from 'react';
+
 import Button from '@components/ui/Button/Button.jsx';
 import Icon from '@components/ui/Icon/Icon.jsx';
 import { TELEGRAM_URL } from '@data/navigation.js';
 import { useLang } from '@/i18n/index.jsx';
 import ctaBg from '@assets/images/tennis-hero-3.jpg';
+import { useGSAP, cinematicReveal, parallax } from '@utils/motion.js';
 import './CtaBanner.scss';
 
 /**
@@ -10,13 +13,37 @@ import './CtaBanner.scss';
  */
 export default function CtaBanner() {
   const { t } = useLang();
+  const rootRef = useRef(null);
+
+  useGSAP(
+    () => {
+      cinematicReveal('.cta-banner__inner', {
+        depth: 280,
+        tilt: 12,
+        y: 56,
+        duration: 1.1,
+        start: 'top 88%',
+      });
+
+      parallax('.cta-banner__bg-img', { trigger: rootRef.current, distance: 20, scale: 1.18 });
+    },
+    { scope: rootRef },
+  );
 
   return (
-    <section className="cta-banner" id="registro">
+    <section className="cta-banner" id="registro" ref={rootRef}>
       <div className="container">
         <div className="cta-banner__inner">
           <div className="cta-banner__bg" aria-hidden="true">
-            <img className="cta-banner__bg-img" src={ctaBg} alt="" loading="lazy" />
+            <img
+              className="cta-banner__bg-img"
+              src={ctaBg}
+              alt=""
+              width="1280"
+              height="1920"
+              loading="lazy"
+              decoding="async"
+            />
             <span className="cta-banner__bg-veil" />
           </div>
 

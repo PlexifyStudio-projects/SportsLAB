@@ -1,0 +1,139 @@
+// =============================================================================
+// COMPONENT · LegalModal (BEM) — ventana de documentos legales
+// =============================================================================
+@use '@styles/abstracts' as *;
+
+.legal-modal {
+  position: fixed;
+  inset: 0;
+  z-index: $z-modal;
+  display: grid;
+  place-items: center;
+  padding: $space-md;
+  background: rgba(4, 4, 5, 0.82);
+  backdrop-filter: blur(6px);
+  animation: legal-modal-in 240ms ease-out;
+
+  &__panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: min(760px, 100%);
+    max-height: min(84vh, 780px);
+    border-radius: $radius-lg;
+    background: linear-gradient(165deg, rgba(28, 28, 33, 0.98), rgba(15, 15, 17, 0.98));
+    border: 1px solid rgba(216, 180, 90, 0.28);
+    box-shadow: $shadow-lg;
+    animation: legal-panel-in 320ms cubic-bezier(0.16, 1, 0.3, 1);
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: $space-md;
+    padding: $space-lg;
+    border-bottom: 1px solid rgba(216, 180, 90, 0.18);
+  }
+
+  &__title {
+    font-size: $font-size-xl;
+    color: $color-heading;
+  }
+
+  &__updated {
+    margin-top: $space-xs;
+    font-size: $font-size-xs;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: $color-text-muted;
+  }
+
+  &__close {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 1px solid $color-border;
+    color: $color-text-muted;
+    transition:
+      color $transition-fast,
+      border-color $transition-fast,
+      background $transition-fast;
+
+    @include focus-ring;
+
+    &:hover {
+      color: $color-primary;
+      border-color: rgba(216, 180, 90, 0.5);
+      background: rgba(216, 180, 90, 0.08);
+    }
+  }
+
+  &__body {
+    padding: $space-lg;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  &__intro {
+    padding-bottom: $space-lg;
+    margin-bottom: $space-lg;
+    border-bottom: 1px solid $color-border;
+    color: $color-text;
+    font-size: $font-size-base;
+  }
+
+  &__section + &__section {
+    margin-top: $space-lg;
+  }
+
+  &__heading {
+    margin-bottom: $space-sm;
+    font-size: $font-size-base;
+    color: $color-primary-light;
+  }
+
+  &__text {
+    font-size: $font-size-sm;
+    line-height: $line-height-base;
+    color: $color-text-muted;
+
+    & + & {
+      margin-top: $space-sm;
+    }
+  }
+}
+
+@keyframes legal-modal-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes legal-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .legal-modal,
+  .legal-modal__panel {
+    animation: none;
+  }
+}

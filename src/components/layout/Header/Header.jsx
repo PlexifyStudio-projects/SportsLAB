@@ -1,15 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
 
 import Icon from '@components/ui/Icon/Icon.jsx';
 import { NAV_LINKS, TELEGRAM_URL } from '@data/navigation.js';
 import { useLang, LANGUAGES } from '@/i18n/index.jsx';
 import logo from '@assets/images/Logo.jpeg';
+import { gsap, ScrollTrigger, useGSAP, prefersReducedMotion } from '@utils/motion.js';
 import './Header.scss';
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 /**
  * Header — Cabecera "luxury": navegación, selector de idioma (i18n) y CTA.
@@ -44,10 +40,14 @@ export default function Header() {
   useGSAP(
     () => {
       // -- Animación de entrada (stagger) --
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out', clearProps: 'transform,opacity' } });
-      tl.from('.header__brand', { y: -16, opacity: 0, duration: 0.5 })
-        .from('.header__nav-item', { y: -14, opacity: 0, stagger: 0.06, duration: 0.45 }, '-=0.25')
-        .from('.header__action', { y: -14, opacity: 0, stagger: 0.06, duration: 0.45 }, '-=0.3');
+      if (!prefersReducedMotion()) {
+        const tl = gsap.timeline({
+          defaults: { ease: 'power3.out', clearProps: 'transform,opacity' },
+        });
+        tl.from('.header__brand', { y: -16, opacity: 0, duration: 0.5 })
+          .from('.header__nav-item', { y: -14, opacity: 0, stagger: 0.06, duration: 0.45 }, '-=0.25')
+          .from('.header__action', { y: -14, opacity: 0, stagger: 0.06, duration: 0.45 }, '-=0.3');
+      }
 
       // -- Efecto de scroll: encoge la cabecera de forma suave (sin ocultarla) --
       const root = rootRef.current;
@@ -72,14 +72,21 @@ export default function Header() {
         <div className="container header__inner">
           <a className="header__brand" href="#top" onClick={closeMobile}>
             <span className="header__logo">
-              <img className="header__logo-img" src={logo} alt="" />
+              <img
+                className="header__logo-img"
+                src={logo}
+                alt=""
+                width="778"
+                height="831"
+                decoding="async"
+              />
             </span>
             <span className="header__wordmark">
               Sports<span className="header__wordmark-accent">LAB</span>
             </span>
           </a>
 
-          <nav className="header__nav" aria-label="Navegación principal">
+          <nav className="header__nav" aria-label={t('a11y.mainNav')}>
             <ul className="header__nav-list">
               {NAV_LINKS.map((link) => (
                 <li className="header__nav-item" key={link.id}>
@@ -97,6 +104,7 @@ export default function Header() {
               <button
                 className="header__action header__lang"
                 type="button"
+                aria-label={`${t('a11y.langSwitch')} (${lang})`}
                 aria-haspopup="listbox"
                 aria-expanded={langOpen}
                 onClick={() => setLangOpen((v) => !v)}
@@ -139,7 +147,7 @@ export default function Header() {
             <button
               className="header__action header__burger"
               type="button"
-              aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}
+              aria-label={mobileOpen ? t('a11y.closeMenu') : t('a11y.openMenu')}
               aria-expanded={mobileOpen}
               onClick={toggleMobile}
             >
@@ -171,7 +179,7 @@ export default function Header() {
             onClick={closeMobile}
           >
             <Icon name="telegram" size={20} />
-            Únete al canal de Telegram
+            {t('mobile.join')}
           </a>
         </div>
       </div>

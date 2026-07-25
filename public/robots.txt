@@ -1,4 +1,16 @@
+# SportsLAB — robots.txt
+#
+# AVISO: al ser un GitHub Pages de proyecto, este fichero se publica en
+# /SportsLAB/robots.txt y los rastreadores SOLO leen el de la raíz del dominio
+# (plexifystudio-projects.github.io/robots.txt), que no controlamos. Se mantiene
+# por si el sitio pasa a un dominio propio; mientras tanto, el sitemap hay que
+# enviarlo a mano desde Google Search Console y Bing Webmaster Tools.
+
 User-agent: *
 Allow: /
+
+# El JS y el CSS deben ser rastreables: el sitio se renderiza en el navegador y
+# sin ellos Googlebot vería una página en blanco.
+Allow: /assets/
 
 Sitemap: https://plexifystudio-projects.github.io/SportsLAB/sitemap.xml

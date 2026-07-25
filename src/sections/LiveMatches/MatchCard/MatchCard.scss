@@ -15,6 +15,10 @@
   background: linear-gradient(160deg, $color-surface-2, $color-surface);
   border: 1px solid rgba(255, 255, 255, 0.07);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  // Con ~50 tarjetas en el carril, `contain` impide que un cambio dentro de una
+  // (el latido, el spotlight, una cuota nueva) obligue al navegador a revalidar
+  // el layout y los estilos de las otras 49.
+  contain: layout style;
   transition:
     transform $transition-base,
     border-color $transition-base,
@@ -76,13 +80,26 @@
     color: $color-danger;
   }
 
+  // El punto "en vivo" se repite en las ~50 tarjetas del marquee. Antes el
+  // latido animaba `box-shadow`, que es una propiedad de PINTADO: los 50 puntos
+  // repintaban a 60 fps dentro de la capa del carril (~16.000 px de ancho) y era
+  // el mayor consumo de la página. Ahora el halo es un pseudo-elemento que solo
+  // anima `transform` y `opacity`, que el compositor resuelve en GPU sin pintar.
   &__live-dot {
+    position: relative;
     width: 7px;
     height: 7px;
     border-radius: 50%;
     background: $color-danger;
-    box-shadow: 0 0 0 0 rgba(217, 58, 58, 0.6);
-    animation: match-pulse 1.6s ease-out infinite;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      box-shadow: 0 0 0 6px rgba(217, 58, 58, 0.55);
+      animation: match-pulse 1.6s ease-out infinite;
+    }
   }
 
   // -- Jugadores --
@@ -146,20 +163,25 @@
   }
 }
 
+// Mismo latido visual que antes, pero solo con `transform` + `opacity`.
 @keyframes match-pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(217, 58, 58, 0.55);
+    transform: scale(0.2);
+    opacity: 1;
   }
   70% {
-    box-shadow: 0 0 0 6px rgba(217, 58, 58, 0);
+    transform: scale(1);
+    opacity: 0;
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(217, 58, 58, 0);
+    transform: scale(1);
+    opacity: 0;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .match-card__live-dot {
+  .match-card__live-dot::after {
     animation: none;
+    opacity: 0;
   }
 }

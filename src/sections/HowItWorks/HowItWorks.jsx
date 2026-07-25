@@ -1,7 +1,4 @@
 import { useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
 
 import SectionHeader from '@components/ui/SectionHeader/SectionHeader.jsx';
 import Icon from '@components/ui/Icon/Icon.jsx';
@@ -10,9 +7,15 @@ import { HOW_IT_WORKS } from '@data/howItWorks.js';
 import { TELEGRAM_URL } from '@data/navigation.js';
 import { useLang } from '@/i18n/index.jsx';
 import courtBg from '@assets/images/tennis-court-fence.jpg';
+import {
+  gsap,
+  useGSAP,
+  cinematicReveal,
+  parallax,
+  scrollDrift,
+  prefersReducedMotion,
+} from '@utils/motion.js';
 import './HowItWorks.scss';
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 /**
  * HowItWorks — Timeline interactiva: la línea de progreso se dibuja al hacer
@@ -24,19 +27,31 @@ export default function HowItWorks() {
 
   useGSAP(
     () => {
-      // Aparición escalonada de los pasos.
-      gsap.from('.how__step', {
-        y: 34,
-        opacity: 0,
-        duration: 0.7,
-        ease: 'power3.out',
+      // Aparición 3D escalonada de los pasos.
+      cinematicReveal('.how__step', {
+        depth: 200,
+        tilt: 16,
+        y: 50,
         stagger: 0.14,
-        scrollTrigger: { trigger: '.how__timeline', start: 'top 78%', once: true },
+        trigger: '.how__timeline',
+        start: 'top 85%',
       });
+
+      // Profundidad de campo: el fondo de pista se mueve más lento que el texto.
+      parallax('.how__bg-img', { trigger: rootRef.current, distance: 16, scale: 1.14 });
+
+      // Los cuatro pasos avanzan a distinta velocidad al cruzar la pantalla.
+      scrollDrift('.how__step', { trigger: '.how__timeline', spread: 36 });
 
       // La línea de progreso se "dibuja" según el scroll.
       const mm = gsap.matchMedia();
       mm.add('(min-width: 1024px)', () => {
+        // Con movimiento reducido la línea se muestra completa, sin scrub.
+        if (prefersReducedMotion()) {
+          gsap.set('.how__track-fill', { scaleX: 1 });
+          return;
+        }
+
         gsap.fromTo(
           '.how__track-fill',
           { scaleX: 0 },
@@ -45,9 +60,10 @@ export default function HowItWorks() {
             ease: 'none',
             scrollTrigger: {
               trigger: '.how__timeline',
-              start: 'top 68%',
+              start: 'top 75%',
               end: 'bottom 62%',
               scrub: true,
+              invalidateOnRefresh: true,
             },
           },
         );
@@ -61,7 +77,15 @@ export default function HowItWorks() {
   return (
     <section className="how" id="como-funciona" ref={rootRef}>
       <div className="how__bg" aria-hidden="true">
-        <img className="how__bg-img" src={courtBg} alt="" loading="lazy" />
+        <img
+          className="how__bg-img"
+          src={courtBg}
+          alt=""
+          width="1920"
+          height="1280"
+          loading="lazy"
+          decoding="async"
+        />
         <span className="how__bg-veil" />
       </div>
 

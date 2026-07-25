@@ -1,5 +1,11 @@
 // =============================================================================
 // BASE · Tipografía
+// -----------------------------------------------------------------------------
+// Sistema de dos voces:
+//   · Playfair Display (serif alto contraste) → titulares. Es la marca.
+//   · Inter (sans neutra)                     → interfaz y cuerpo.
+// Los titulares llevan interlineado cerrado y tracking negativo: a tamaño
+// grande, una serif con los valores por defecto se ve floja y desarmada.
 // =============================================================================
 @use '../abstracts' as *;
 
@@ -9,6 +15,8 @@ body {
   font-weight: $font-weight-normal;
   line-height: $line-height-base;
   color: $color-text;
+  // Cifras de ancho fijo: las cuotas y los contadores no "bailan" al cambiar.
+  font-variant-numeric: tabular-nums;
 }
 
 h1,
@@ -16,36 +24,71 @@ h2,
 h3,
 h4 {
   font-family: $font-family-heading;
-  font-weight: $font-weight-bold;
-  line-height: $line-height-tight;
+  font-weight: $font-weight-display;
+  line-height: $line-height-display;
+  letter-spacing: $tracking-display;
   color: $color-heading;
+  text-rendering: optimizeLegibility;
 }
 
+// Escala fluida: crece con el viewport en vez de saltar por breakpoints, que es
+// lo que hacía que los titulares se vieran encajados a la fuerza en portátiles.
 h1 {
-  font-size: $font-size-3xl;
-
-  @include respond-to('md') {
-    font-size: $font-size-4xl;
-  }
+  font-size: clamp(2.6rem, 6.4vw, 5rem);
 }
 
 h2 {
-  font-size: $font-size-2xl;
-
-  @include respond-to('md') {
-    font-size: $font-size-3xl;
-  }
+  font-size: clamp(2rem, 4.6vw, 3.4rem);
 }
 
+// Los h3 son rótulos de tarjeta, no titulares: vuelven a la sans para no
+// competir con los h2 y mantener limpia la jerarquía.
 h3 {
-  font-size: $font-size-xl;
+  font-family: $font-family-base;
+  font-size: clamp(1.1rem, 1.7vw, 1.3rem);
+  font-weight: $font-weight-bold;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+h4 {
+  font-family: $font-family-base;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  line-height: 1.3;
+  letter-spacing: normal;
 }
 
 p {
   color: $color-text-muted;
+  // Medida cómoda: por encima de ~72 caracteres la lectura se cansa.
+  max-width: 72ch;
 }
 
 strong {
   font-weight: $font-weight-semibold;
   color: $color-text;
+}
+
+// La cursiva de la serif es donde más se luce: sirve para destacar sin gritar.
+em {
+  font-family: $font-family-heading;
+  font-style: italic;
+}
+
+// -----------------------------------------------------------------------------
+// Utilidades tipográficas de marca
+// -----------------------------------------------------------------------------
+
+// Texto en oro pulido: degradado recortado sobre el glifo.
+.text-gold {
+  background: linear-gradient(
+    100deg,
+    $color-primary-light 0%,
+    $color-primary 48%,
+    $color-primary-dark 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }

@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 import { formatOdd } from '@utils/format.js';
 import './OddsButton.scss';
 
@@ -10,7 +12,7 @@ import './OddsButton.scss';
  * @param {'up'|'down'|null} [props.trend]  Tendencia de la cuota (destello).
  * @param {(value:number)=>void} [props.onSelect]
  */
-export default function OddsButton({ label, value, trend, onSelect }) {
+function OddsButton({ label, value, trend, onSelect }) {
   const classes = `odds-button ${trend ? `odds-button--${trend}` : ''}`;
 
   return (
@@ -32,3 +34,5 @@ export default function OddsButton({ label, value, trend, onSelect }) {
     </button>
   );
 }
+
+export default memo(OddsButton);

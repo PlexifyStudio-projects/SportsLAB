@@ -1,17 +1,52 @@
+import { useState } from 'react';
+
+import LegalModal from '@components/ui/LegalModal/LegalModal.jsx';
 import { TELEGRAM_URL } from '@data/navigation.js';
+import { CONTACT_EMAIL, LEGAL } from '@data/legal.js';
 import { useLang } from '@/i18n/index.jsx';
 import logo from '@assets/images/Logo.jpeg';
 import './Footer.scss';
 
 const MIN_AGE = import.meta.env.VITE_MIN_AGE ?? '18';
 
+// Columnas de navegación. Todos los destinos existen de verdad: son anclas de
+// la propia página o enlaces externos reales. Nada de "#!".
 const COLUMNS = [
-  { id: 'product', links: 'productLinks' },
-  { id: 'company', links: 'companyLinks' },
-  { id: 'support', links: 'supportLinks' },
-  { id: 'legal', title: 'legalTitle', links: 'legalLinks' },
+  {
+    id: 'product',
+    links: [
+      { key: 'live', href: '#en-vivo' },
+      { key: 'how', href: '#como-funciona' },
+      { key: 'tournaments', href: '#torneos' },
+      { key: 'results', href: '#resultados' },
+      { key: 'features', href: '#ventajas' },
+    ],
+  },
+  {
+    id: 'company',
+    links: [
+      { key: 'about', href: '#estilo' },
+      { key: 'numbers', href: '#top' },
+      { key: 'join', href: '#registro' },
+    ],
+  },
+  {
+    id: 'support',
+    links: [
+      { key: 'telegram', href: TELEGRAM_URL, external: true },
+      { key: 'email', href: `mailto:${CONTACT_EMAIL}` },
+    ],
+  },
 ];
 
+// Documentos legales: abren un modal, no navegan fuera.
+const LEGAL_LINKS = ['terms', 'privacy', 'cookies', 'responsible'];
+
+// Se quitó WhatsApp: no había número, y un enlace a wa.me vacío no lleva a
+// ninguna parte.
+// PENDIENTE: Facebook e Instagram apuntan a `#` hasta que el cliente facilite
+// las URLs reales de los perfiles. Al no ser enlaces externos, no llevan
+// `target="_blank"` ni entran en el `sameAs` del JSON-LD.
 const SOCIALS = [
   {
     id: 'facebook',
@@ -29,13 +64,6 @@ const SOCIALS = [
     path: 'M8 3h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H8Zm4 3.5A3.5 3.5 0 1 1 8.5 12 3.5 3.5 0 0 1 12 8.5Zm0 2A1.5 1.5 0 1 0 13.5 12 1.5 1.5 0 0 0 12 10.5ZM17 6.3a1.05 1.05 0 1 1-1.05 1.05A1.05 1.05 0 0 1 17 6.3Z',
   },
   {
-    id: 'whatsapp',
-    label: 'WhatsApp',
-    href: 'https://wa.me/',
-    brand: '#25D366',
-    path: 'M12 3a9 9 0 0 0-7.7 13.65L3 21l4.5-1.28A9 9 0 1 0 12 3Zm0 16.3a7.3 7.3 0 0 1-3.72-1.02l-.27-.16-2.66.7.71-2.6-.17-.27A7.3 7.3 0 1 1 12 19.3Zm4.02-5.2c-.22-.11-1.3-.64-1.5-.72-.2-.07-.35-.11-.5.11-.14.22-.56.72-.69.86-.13.15-.25.16-.47.06a6 6 0 0 1-1.76-1.09 6.6 6.6 0 0 1-1.22-1.5c-.13-.22 0-.34.1-.45.1-.1.22-.26.33-.39.1-.13.14-.22.2-.37.08-.14.04-.27-.02-.38-.06-.11-.5-1.2-.69-1.65-.18-.43-.36-.37-.5-.37h-.42c-.15 0-.38.05-.58.27-.2.22-.77.75-.77 1.8 0 1.06.79 2.08.9 2.22.11.15 1.54 2.36 3.73 3.3 1.9.83 2.28.67 2.7.63.4-.04 1.3-.53 1.48-1.05.18-.51.18-.95.13-1.04-.05-.09-.2-.15-.42-.26Z',
-  },
-  {
     id: 'telegram',
     label: 'Telegram',
     href: TELEGRAM_URL,
@@ -44,84 +72,143 @@ const SOCIALS = [
   },
   {
     id: 'gmail',
-    label: 'Gmail',
-    href: 'mailto:abrahamsportslab@gmail.com',
+    label: CONTACT_EMAIL,
+    href: `mailto:${CONTACT_EMAIL}`,
     brand: '#EA4335',
     path: 'M5 5h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1v-8.3l-6 4.2-6-4.2V19H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm.5 2L12 11.6 18.5 7H5.5Z',
   },
 ];
 
 /**
- * Footer — Pie de página con logo, redes sociales y aviso de juego responsable.
+ * Footer — Pie de página con navegación real, contacto, documentos legales
+ * (en modal) y aviso de juego responsable.
  */
 export default function Footer() {
-  const { t } = useLang();
+  const { lang, t } = useLang();
+  const [openDoc, setOpenDoc] = useState(null);
   const responsible = t('footer.responsible').replace('{age}', MIN_AGE);
 
   return (
-    <footer className="footer">
-      <div className="container">
-        <div className="footer__grid">
-          <div className="footer__brand">
-            <a className="footer__brand-link" href="#top">
-              <img className="footer__logo" src={logo} alt="" />
-              <span className="footer__brand-name">
-                Sports<span className="footer__brand-accent">LAB</span>
-              </span>
-            </a>
-            <p className="footer__tagline">{t('footer.tagline')}</p>
+    <>
+      <footer className="footer">
+        <div className="container">
+          <div className="footer__grid">
+            <div className="footer__brand">
+              <a className="footer__brand-link" href="#top">
+                <img
+                  className="footer__logo"
+                  src={logo}
+                  alt=""
+                  width="778"
+                  height="831"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span className="footer__brand-name">
+                  Sports<span className="footer__brand-accent">LAB</span>
+                </span>
+              </a>
+              <p className="footer__tagline">{t('footer.tagline')}</p>
 
-            <ul className="footer__socials" aria-label="Redes sociales">
-              {SOCIALS.map((s) => (
-                <li key={s.id}>
-                  <a
-                    className={`footer__social ${s.gradient ? 'footer__social--ig' : ''}`}
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={s.label}
-                    style={{ '--brand': s.brand }}
-                  >
-                    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-                      <path fill="currentColor" d={s.path} />
-                    </svg>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {COLUMNS.map((column) => {
-            const title = t(`footer.${column.title ?? column.id}`);
-            return (
-              <nav className="footer__column" key={column.id} aria-label={title}>
-                <h3 className="footer__column-title">{title}</h3>
-                <ul className="footer__links">
-                  {t(`footer.${column.links}`).map((link) => (
-                    <li key={link}>
-                      <a className="footer__link" href="#!">
-                        {link}
+              <ul className="footer__socials" aria-label={t('footer.socials')}>
+                {SOCIALS.map((social) => {
+                  // Solo abren en pestaña nueva los enlaces que salen del sitio:
+                  // ni `mailto:` ni los marcadores `#` pendientes de URL real.
+                  const external = social.href.startsWith('http');
+                  return (
+                    <li key={social.id}>
+                      <a
+                        className={`footer__social ${social.gradient ? 'footer__social--ig' : ''}`}
+                        href={social.href}
+                        target={external ? '_blank' : undefined}
+                        rel={external ? 'noopener noreferrer' : undefined}
+                        aria-label={social.label}
+                        style={{ '--brand': social.brand }}
+                      >
+                        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                          <path fill="currentColor" d={social.path} />
+                        </svg>
                       </a>
                     </li>
-                  ))}
-                </ul>
-              </nav>
-            );
-          })}
-        </div>
+                  );
+                })}
+              </ul>
+            </div>
 
-        <div className="footer__responsible">
-          <span className="footer__age" aria-label={t('footer.age')(MIN_AGE)}>
-            +{MIN_AGE}
-          </span>
-          <p className="footer__responsible-text">{responsible}</p>
-        </div>
+            {COLUMNS.map((column) => {
+              const title = t(`footer.${column.id}`);
+              return (
+                <nav className="footer__column" key={column.id} aria-label={title}>
+                  <h3 className="footer__column-title">{title}</h3>
+                  <ul className="footer__links">
+                    {column.links.map((link) => (
+                      <li key={link.key}>
+                        <a
+                          className="footer__link"
+                          href={link.href}
+                          target={link.external ? '_blank' : undefined}
+                          rel={link.external ? 'noopener noreferrer' : undefined}
+                        >
+                          {t(`footer.link.${link.key}`)}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              );
+            })}
 
-        <div className="footer__bottom">
-          <p className="footer__copy">{t('footer.copy')}</p>
-          <p className="footer__disclaimer">{t('footer.disclaimer')}</p>
+            <nav className="footer__column" aria-label={t('footer.legalTitle')}>
+              <h3 className="footer__column-title">{t('footer.legalTitle')}</h3>
+              <ul className="footer__links">
+                {LEGAL_LINKS.map((id) => (
+                  <li key={id}>
+                    <button
+                      className="footer__link footer__link--button"
+                      type="button"
+                      onClick={() => setOpenDoc(id)}
+                    >
+                      {LEGAL[lang][id].title}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+
+          <div className="footer__responsible">
+            <span className="footer__age" aria-label={t('footer.age')(MIN_AGE)}>
+              +{MIN_AGE}
+            </span>
+            <p className="footer__responsible-text">{responsible}</p>
+          </div>
+
+          <div className="footer__bottom">
+            <p className="footer__copy">{t('footer.copy')}</p>
+            <p className="footer__disclaimer">{t('footer.disclaimer')}</p>
+
+            {/* Crédito de autoría del estudio. */}
+            <p className="footer__credit">
+              {t('footer.madeBy')}{' '}
+              <a
+                className="footer__credit-link"
+                href="https://plexifystudio.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Plexify Studio
+              </a>
+            </p>
+          </div>
         </div>
-      </div>
-    </footer>
+      </footer>
+
+      <LegalModal
+        doc={openDoc ? LEGAL[lang][openDoc] : null}
+        onClose={() => setOpenDoc(null)}
+        closeLabel={t('footer.close')}
+        updatedLabel={t('footer.updated')}
+      />
+    </>
   );
 }

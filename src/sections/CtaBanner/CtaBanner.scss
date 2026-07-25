@@ -101,11 +101,15 @@
     z-index: 1;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    // En móvil el botón ocupa todo el ancho de la tarjeta. Antes iba a ancho de
+    // contenido con `flex-shrink: 0`, así que una etiqueta larga ensanchaba el
+    // bloque más que su contenedor y se salía por la derecha.
+    align-items: stretch;
     gap: $space-md;
-    flex-shrink: 0;
+    min-width: 0;
 
     @include respond-to('lg') {
+      flex-shrink: 0;
       align-items: flex-end;
       max-width: 320px;
     }

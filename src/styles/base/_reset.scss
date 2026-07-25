@@ -12,7 +12,11 @@
 
 html {
   -webkit-text-size-adjust: 100%;
-  scroll-behavior: smooth;
+  // OJO: nada de `scroll-behavior: smooth` aquí. ScrollTrigger guarda y
+  // restaura la posición de scroll en cada `refresh()`, y con scroll suave el
+  // navegador ANIMA esa restauración: la página bajaba y volvía a subir sola.
+  // El desplazamiento suave de los enlaces internos lo hace `smoothAnchors()`
+  // (src/utils/motion.js), que sí se puede desactivar durante un refresh.
 }
 
 body {

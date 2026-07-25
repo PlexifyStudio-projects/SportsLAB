@@ -1,16 +1,20 @@
 import { useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
 
 import Button from '@components/ui/Button/Button.jsx';
 import Icon from '@components/ui/Icon/Icon.jsx';
 import { TELEGRAM_URL } from '@data/navigation.js';
 import { useLang } from '@/i18n/index.jsx';
 import heroBg from '@assets/images/tennis-hero-1.jpg';
+import { gsap, useGSAP, prefersReducedMotion } from '@utils/motion.js';
 import './Hero.scss';
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+// Prueba social del hero: apostadores destacados de la comunidad.
+const BETTORS = [
+  { id: 'b1', name: 'Andrés M.', initials: 'AM' },
+  { id: 'b2', name: 'Camila R.', initials: 'CR' },
+  { id: 'b3', name: 'Julián T.', initials: 'JT' },
+  { id: 'b4', name: 'Valeria O.', initials: 'VO' },
+];
 
 const CARDS = [
   { id: 'canal', icon: 'telegram', labelKey: 'hero.cardCanal', valueKey: 'hero.cardCanalV' },
@@ -30,7 +34,15 @@ export default function Hero() {
     () => {
       const root = rootRef.current;
 
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      // Con movimiento reducido (muy común en macOS) no animamos nada: el hero
+      // se pinta directamente en su estado final.
+      if (prefersReducedMotion()) return;
+
+      // `clearProps` evita que queden `transform`/`opacity` inline pegados en el
+      // hero si una animación se interrumpe (pestaña en segundo plano, etc.).
+      const tl = gsap.timeline({
+        defaults: { ease: 'power3.out', clearProps: 'transform,opacity' },
+      });
       tl.from('.hero__pill', { y: 16, opacity: 0, duration: 0.5 })
         .from('.hero__line-inner', { yPercent: 118, duration: 0.9, stagger: 0.12 }, '-=0.2')
         .from('.hero__underline', { scaleX: 0, duration: 0.7, ease: 'power3.inOut' }, '-=0.4')
@@ -54,6 +66,16 @@ export default function Hero() {
         ease: 'none',
         scrollTrigger: { trigger: root, start: 'top top', end: 'bottom top', scrub: true },
       });
+
+      // Salida de plano: el contenido se aleja y se desvanece al abandonar la
+      // portada, en vez de cortarse de golpe contra la sección siguiente.
+      gsap.to('.hero__content', {
+        opacity: 0,
+        y: -70,
+        scale: 0.96,
+        ease: 'none',
+        scrollTrigger: { trigger: root, start: 'center top', end: 'bottom top', scrub: true },
+      });
     },
     { scope: rootRef },
   );
@@ -62,7 +84,19 @@ export default function Hero() {
     <section className="hero" id="top" ref={rootRef}>
       {/* Fondo full-bleed */}
       <div className="hero__bg" aria-hidden="true">
-        <img className="hero__bg-img" src={heroBg} alt="" />
+        {/* Elemento LCP: se descarga con prioridad alta y NUNCA en diferido.
+            `width`/`height` dan al navegador la relación de aspecto antes de que
+            llegue el CSS, y `decoding="async"` saca la decodificación del hilo
+            principal para que no retrase el primer pintado. */}
+        <img
+          className="hero__bg-img"
+          src={heroBg}
+          alt=""
+          width="1920"
+          height="1281"
+          fetchPriority="high"
+          decoding="async"
+        />
         <div className="hero__bg-overlay" />
         <div className="hero__bg-grain" />
       </div>
@@ -92,12 +126,18 @@ export default function Hero() {
           <p className="hero__subtitle">{t('hero.subtitle')}</p>
 
           <div className="hero__social">
-            <div className="hero__avatars" aria-hidden="true">
-              <span className="hero__avatar" data-i="1" />
-              <span className="hero__avatar" data-i="2" />
-              <span className="hero__avatar" data-i="3" />
-              <span className="hero__avatar" data-i="4" />
-              <span className="hero__avatar hero__avatar--count">+2K</span>
+            <div className="hero__avatars">
+              {BETTORS.map((bettor, i) => (
+                <span className="hero__avatar" key={bettor.id} data-i={i + 1}>
+                  <span className="hero__avatar-initials" aria-hidden="true">
+                    {bettor.initials}
+                  </span>
+                  <span className="hero__avatar-name">{bettor.name}</span>
+                </span>
+              ))}
+              <span className="hero__avatar hero__avatar--count" aria-hidden="true">
+                +2K
+              </span>
             </div>
             <div className="hero__rating">
               <span className="hero__stars">★★★★★</span>
@@ -129,7 +169,7 @@ export default function Hero() {
             </li>
           </ul>
 
-          <div className="hero__leagues" aria-label="Torneos que cubrimos">
+          <div className="hero__leagues" aria-label={t('a11y.leagues')}>
             <span className="hero__leagues-label">{t('hero.covers')}</span>
             <span className="hero__league">ATP</span>
             <span className="hero__league">WTA</span>
@@ -162,7 +202,7 @@ export default function Hero() {
         href={TELEGRAM_URL}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Únete al canal de Telegram"
+        aria-label={t('a11y.telegramFloat')}
       >
         <Icon name="telegram" size={26} />
       </a>

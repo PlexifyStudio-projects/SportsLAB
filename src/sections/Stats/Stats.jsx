@@ -1,13 +1,9 @@
 import { useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
 
 import Icon from '@components/ui/Icon/Icon.jsx';
 import { useLang } from '@/i18n/index.jsx';
+import { gsap, useGSAP, scrollDrift, prefersReducedMotion, rafThrottle } from '@utils/motion.js';
 import './Stats.scss';
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const STATS = [
   { id: 'partidos', to: 1200, prefix: '+', icon: 'chart' },
@@ -16,13 +12,13 @@ const STATS = [
   { id: 'comunidad', stars: true, icon: 'telegram' },
 ];
 
-/** Actualiza la posición del "spotlight" que sigue al cursor. */
-function onCardMove(e) {
-  const card = e.currentTarget;
-  const r = card.getBoundingClientRect();
-  card.style.setProperty('--mx', `${e.clientX - r.left}px`);
-  card.style.setProperty('--my', `${e.clientY - r.top}px`);
-}
+// Actualiza la posición del "spotlight" que sigue al cursor, como mucho una vez
+// por frame (`rafThrottle`).
+const onCardMove = rafThrottle(({ currentTarget, clientX, clientY }) => {
+  const r = currentTarget.getBoundingClientRect();
+  currentTarget.style.setProperty('--mx', `${clientX - r.left}px`);
+  currentTarget.style.setProperty('--my', `${clientY - r.top}px`);
+});
 
 /**
  * Stats — Bento grid premium: glassmorphism, borde con gradiente animado,
@@ -32,38 +28,65 @@ export default function Stats() {
   const { t } = useLang();
   const rootRef = useRef(null);
 
+  // Stats entra JUNTO AL HERO, al cargar la página, no al hacer scroll.
+  // Va inmediatamente debajo del hero, así que casi siempre ya está a la vista:
+  // un ScrollTrigger aquí solo aportaba el tirón de reposicionar el scroll.
   useGSAP(
     () => {
-      // Revelado escalonado del bento.
-      gsap.from('.stats__cell', {
-        y: 30,
+      const counters = gsap.utils.toArray('.stats__num[data-to]');
+      const render = (el, v) => {
+        el.textContent = Math.round(v).toLocaleString('es-CO');
+      };
+
+      // Sin animación: bento visible y cifras en su valor final.
+      if (prefersReducedMotion()) {
+        counters.forEach((el) => render(el, Number(el.dataset.to)));
+        return;
+      }
+
+      const tl = gsap.timeline({ delay: 0.35 });
+
+      // Revelado 3D escalonado del bento: las celdas llegan desde el fondo.
+      tl.from('.stats__cell', {
         opacity: 0,
-        duration: 0.7,
+        y: 56,
+        z: -220,
+        rotateX: 14,
+        scale: 0.96,
+        transformPerspective: 1200,
+        transformOrigin: 'center center',
+        duration: 1,
+        stagger: 0.09,
         ease: 'power3.out',
-        stagger: 0.08,
-        scrollTrigger: { trigger: '.stats__bento', start: 'top 80%', once: true },
+        clearProps: 'transform,opacity',
       });
 
-      // Contadores.
-      gsap.utils.toArray('.stats__num[data-to]').forEach((el) => {
-        const to = Number(el.dataset.to);
+      // Contadores, arrancando con el revelado ya en marcha.
+      counters.forEach((el) => {
         const obj = { v: 0 };
-        gsap.to(obj, {
-          v: to,
-          duration: 1.6,
-          ease: 'power2.out',
-          scrollTrigger: { trigger: el, start: 'top 90%', once: true },
-          onUpdate: () => {
-            el.textContent = Math.round(obj.v).toLocaleString('es-CO');
+        tl.to(
+          obj,
+          {
+            v: Number(el.dataset.to),
+            duration: 1.6,
+            ease: 'power2.out',
+            onUpdate: () => render(el, obj.v),
           },
-        });
+          '<0.1',
+        );
       });
+
+      // Al seguir bajando, las celdas se separan a distinta velocidad: el bento
+      // gana profundidad en vez de desplazarse como un bloque rígido.
+      scrollDrift('.stats__cell', { trigger: '.stats__bento', spread: 42 });
     },
     { scope: rootRef },
   );
 
+  // La sección se nombra con su propio h2 (`aria-labelledby`) en vez de con un
+  // `aria-label` fijo en español: así el nombre accesible sigue al idioma.
   return (
-    <section className="stats" ref={rootRef} aria-label="Estadísticas">
+    <section className="stats" ref={rootRef} aria-labelledby="stats-titulo">
       <div className="container">
         <div className="stats__bento">
           <article
@@ -71,7 +94,7 @@ export default function Stats() {
             onMouseMove={onCardMove}
           >
             <span className="stats__eyebrow">{t('stats.eyebrow')}</span>
-            <h2 className="stats__title">
+            <h2 className="stats__title" id="stats-titulo">
               {t('stats.title')} <span className="stats__hl">{t('stats.titleHl')}</span>
             </h2>
             <p className="stats__text">{t('stats.text')}</p>

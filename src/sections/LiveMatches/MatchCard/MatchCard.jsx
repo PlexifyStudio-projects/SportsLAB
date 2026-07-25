@@ -1,23 +1,30 @@
+import { memo } from 'react';
+
 import OddsButton from '@components/ui/OddsButton/OddsButton.jsx';
+import { rafThrottle } from '@utils/motion.js';
 import './MatchCard.scss';
 
 const SURFACE_LABEL = { clay: 'Tierra', grass: 'Hierba', hard: 'Pista dura' };
 
-/** Spotlight que sigue el cursor. */
-function onCardMove(e) {
-  const card = e.currentTarget;
-  const r = card.getBoundingClientRect();
-  card.style.setProperty('--mx', `${e.clientX - r.left}px`);
-  card.style.setProperty('--my', `${e.clientY - r.top}px`);
-}
+// Spotlight que sigue el cursor, limitado a una escritura por frame. Hay ~50
+// tarjetas en el marquee: sin rAF, cada movimiento del ratón forzaba un
+// `getBoundingClientRect` (reflow) y dos escrituras de custom property.
+const onCardMove = rafThrottle(({ currentTarget, clientX, clientY }) => {
+  const r = currentTarget.getBoundingClientRect();
+  currentTarget.style.setProperty('--mx', `${clientX - r.left}px`);
+  currentTarget.style.setProperty('--my', `${clientY - r.top}px`);
+});
 
 /**
  * MatchCard — Tarjeta premium de un partido de tenis en vivo (glass + spotlight).
  *
+ * Va memoizada: `useLiveOdds` solo cambia la referencia de los partidos que se
+ * mueven en cada tick, así que las tarjetas restantes no se re-renderizan.
+ *
  * @param {Object} props
  * @param {import('@data/matches.js').Match & { trend?: { home: string|null, away: string|null } }} props.match
  */
-export default function MatchCard({ match }) {
+function MatchCard({ match }) {
   const { tournament, surface, home, away, status, odds, trend } = match;
 
   return (
@@ -50,3 +57,5 @@ export default function MatchCard({ match }) {
     </article>
   );
 }
+
+export default memo(MatchCard);

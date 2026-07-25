@@ -50,7 +50,24 @@ export default defineConfig(({ command }) => ({
 
   build: {
     outDir: 'dist',
-    sourcemap: true,
+    // Sin sourcemap en producción: generaba un `.map` de ~1,6 MB que se publicaba
+    // en Pages y expone el código fuente. Para depurar un build puntual, usa
+    // `vite build --sourcemap`.
+    sourcemap: false,
     target: 'es2020',
+
+    rollupOptions: {
+      output: {
+        // React y GSAP (~106 kB gzip) van a su propio chunk: no cambian nunca,
+        // así que el navegador los reutiliza de caché y cada despliegue solo
+        // obliga a redescargar los ~23 kB gzip del código de la landing.
+        // Medido: separar no penaliza el peso total (380,6 kB frente a 380,8 kB
+        // en un único chunk), y además los dos ficheros se bajan en paralelo.
+        manualChunks(id) {
+          if (id.includes('/node_modules/')) return 'vendor';
+          return undefined;
+        },
+      },
+    },
   },
 }));

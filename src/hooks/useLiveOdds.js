@@ -32,18 +32,27 @@ function advanceScore(status) {
  * useLiveOdds — Simula un partido en directo en el cliente (sin backend):
  * mueve las cuotas (con tendencia up/down) y hace avanzar el marcador.
  *
+ * Cada tick sustituye SOLO los partidos que cambian: los demás conservan su
+ * referencia de objeto, así que las `MatchCard` memoizadas no se vuelven a
+ * renderizar. Sin esto, un tick repintaba las ~50 tarjetas del marquee.
+ *
  * @param {import('@data/matches.js').Match[]} initial
  * @param {Object} [options]
  * @param {number} [options.interval=2400]  Milisegundos entre actualizaciones.
+ * @param {boolean} [options.active=true]   Si es `false`, se detiene el reloj.
  * @returns {Array<import('@data/matches.js').Match & { trend: {home: string|null, away: string|null} }>}
  */
-export function useLiveOdds(initial, { interval = 2400 } = {}) {
+export function useLiveOdds(initial, { interval = 2400, active = true } = {}) {
   const baseRef = useRef(initial.map((m) => ({ home: m.odds.home, away: m.odds.away })));
   const [matches, setMatches] = useState(() =>
     initial.map((m) => ({ ...m, trend: { home: null, away: null } })),
   );
 
   useEffect(() => {
+    // Fuera de pantalla (o pestaña en segundo plano) no simulamos nada: el
+    // temporizador ni siquiera se crea.
+    if (!active) return undefined;
+
     const id = setInterval(() => {
       setMatches((prev) =>
         prev.map((m, i) => {
@@ -74,7 +83,7 @@ export function useLiveOdds(initial, { interval = 2400 } = {}) {
     }, interval);
 
     return () => clearInterval(id);
-  }, [interval]);
+  }, [interval, active]);
 
   return matches;
 }
