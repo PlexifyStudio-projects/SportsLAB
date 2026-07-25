@@ -110,8 +110,29 @@
 
     @include respond-to('lg') {
       flex-shrink: 0;
-      align-items: flex-end;
-      max-width: 320px;
+      // Ancho fijo y elementos a lo ancho (`stretch`, heredado): el botón y la
+      // garantía comparten los mismos márgenes izquierdo y derecho, y el
+      // emblema se centra encima. Antes iban pegados a la derecha y cada uno
+      // acababa en un punto distinto.
+      width: 320px;
+    }
+  }
+
+  // -- Emblema VIP sobre el botón --
+  // Cuadrado con las esquinas redondeadas, no círculo: el rótulo "MEMBERS" llega
+  // casi al borde inferior y un recorte circular se lo comía por los lados.
+  &__badge {
+    // El contenedor es `align-items: stretch` en móvil; sin esto la imagen se
+    // estiraría a todo el ancho de la tarjeta.
+    align-self: center;
+    width: 104px;
+    height: auto;
+    border-radius: $radius-md;
+    border: 1px solid rgba(216, 180, 90, 0.45);
+    box-shadow: $shadow-glow;
+
+    @include respond-to('lg') {
+      width: 116px;
     }
   }
 
@@ -129,7 +150,10 @@
     }
 
     @include respond-to('lg') {
-      text-align: right;
+      // Alineada a la izquierda bajo el botón. Centrarla dejaba dos líneas
+      // desiguales colgando en el aire; a bandera queda un bloque limpio.
+      align-self: stretch;
+      text-align: left;
     }
   }
 }

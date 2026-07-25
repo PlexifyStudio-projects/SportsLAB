@@ -73,11 +73,22 @@
     mix-blend-mode: screen;
   }
 
+  // Serif de alto contraste en peso normal: el nombre completo es largo y en
+  // negrita se comía la barra. Así queda más delicado y con aire de firma.
   &__wordmark {
-    font-size: $font-size-xl;
-    font-weight: $font-weight-bold;
-    letter-spacing: -0.01em;
+    font-family: $font-family-heading;
+    font-weight: $font-weight-normal;
+    letter-spacing: 0.005em;
     color: $color-heading;
+    white-space: nowrap;
+
+    // "BrahamSportsLabs" ocupa casi el doble que el nombre corto anterior: a
+    // 1,5rem empujaba el idioma y el CTA fuera de la barra en móvil.
+    font-size: $font-size-lg;
+
+    @include respond-to('md') {
+      font-size: $font-size-xl;
+    }
 
     @media (max-width: 380px) {
       display: none;

@@ -81,8 +81,10 @@ export default function Header() {
                 decoding="async"
               />
             </span>
+            {/* La "A" inicial de la marca la pone el logo, por eso el texto
+                arranca en "Braham": juntos se leen "AbrahamSportsLabs". */}
             <span className="header__wordmark">
-              Sports<span className="header__wordmark-accent">LAB</span>
+              BrahamSports<span className="header__wordmark-accent">Labs</span>
             </span>
           </a>
 

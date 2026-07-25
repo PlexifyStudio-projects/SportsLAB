@@ -39,9 +39,12 @@
     mix-blend-mode: screen;
   }
 
+  // Mismo tratamiento que el wordmark del header (serif en peso normal).
   &__brand-name {
+    font-family: $font-family-heading;
     font-size: $font-size-xl;
-    font-weight: $font-weight-bold;
+    font-weight: $font-weight-normal;
+    letter-spacing: 0.005em;
     color: $color-heading;
   }
 

@@ -2,9 +2,10 @@ import { useRef } from 'react';
 
 import Button from '@components/ui/Button/Button.jsx';
 import Icon from '@components/ui/Icon/Icon.jsx';
-import { TELEGRAM_URL } from '@data/navigation.js';
+import { TELEGRAM_VIP_URL } from '@data/navigation.js';
 import { useLang } from '@/i18n/index.jsx';
 import ctaBg from '@assets/images/tennis-hero-3.jpg';
+import vipBadge from '@assets/images/VIPs.jpg';
 import { useGSAP, cinematicReveal, parallax } from '@utils/motion.js';
 import './CtaBanner.scss';
 
@@ -59,7 +60,16 @@ export default function CtaBanner() {
           </div>
 
           <div className="cta-banner__actions">
-            <Button as="a" href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" variant="accent" size="lg">
+            <img
+              className="cta-banner__badge"
+              src={vipBadge}
+              alt="AbrahamSportsLAB VIP Members"
+              width="320"
+              height="320"
+              loading="lazy"
+              decoding="async"
+            />
+            <Button as="a" href={TELEGRAM_VIP_URL} target="_blank" rel="noopener noreferrer" variant="accent" size="lg">
               <Icon name="telegram" size={20} />
               {t('cta.button')}
             </Button>

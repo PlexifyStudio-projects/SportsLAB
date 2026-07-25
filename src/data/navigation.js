@@ -3,6 +3,12 @@
  */
 export const TELEGRAM_URL = 'https://t.me/abrahamsportslab';
 
+/**
+ * Bot de altas VIP. Destino del CTA de la oferta del 20%: quien viene de ahí es
+ * un VIP nuevo y entra por el bot, no por el canal general.
+ */
+export const TELEGRAM_VIP_URL = 'https://t.me/AbrahamSportsVIPBot';
+
 /** Perfil de Instagram del fundador. */
 export const INSTAGRAM_URL = 'https://www.instagram.com/_jabrahamb/';
 

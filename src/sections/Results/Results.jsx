@@ -6,16 +6,19 @@ import { useLang } from '@/i18n/index.jsx';
 import { useInView } from '@hooks/useInView.js';
 import { gsap, useGSAP, cinematicReveal, rafThrottle, prefersReducedMotion } from '@utils/motion.js';
 
-import bet1 from '@assets/images/11.jpeg';
-import bet2 from '@assets/images/12.jpeg';
-import bet3 from '@assets/images/13.jpeg';
-import bet4 from '@assets/images/14.jpeg';
-import bet5 from '@assets/images/15.jpeg';
+import bet1 from '@assets/images/Ganancia3.jpeg';
+import bet2 from '@assets/images/Ganancia2.jpeg';
+import bet3 from '@assets/images/Ganancia1.jpeg';
+import bet4 from '@assets/images/15.jpeg';
+import bet5 from '@assets/images/13.jpeg';
 
 import './Results.scss';
 
-// Capturas reales de cupones ganados. Son APAISADAS y de fondo claro, así que
-// se presentan como recibos flotando sobre el negro, no como pósters verticales.
+// Capturas reales de cupones ganados, de fondo claro: se presentan como recibos
+// flotando sobre el negro, no como pósters verticales.
+//
+// Orden de pago descendente ($2.125.200 → $260.000): el carrusel arranca en el
+// primero, así que la prueba más fuerte es la que se ve al llegar.
 const PROOFS = [bet1, bet2, bet3, bet4, bet5];
 const N = PROOFS.length;
 
@@ -132,12 +135,15 @@ export default function Results() {
                     <span className="results__badge">
                       <Icon name="trophy" size={14} /> {t('results.badge')}
                     </span>
+                    {/* 3:2 exacto, el mismo `aspect-ratio` que fija el CSS: las
+                        capturas ya no comparten proporción (las nuevas son casi
+                        cuadradas) y el marco es quien manda. */}
                     <img
                       className="results__img"
                       src={src}
                       alt={t('results.alt')(i + 1, N)}
                       width="1320"
-                      height="887"
+                      height="880"
                       loading="lazy"
                       decoding="async"
                       draggable="false"

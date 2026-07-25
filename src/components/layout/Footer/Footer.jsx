@@ -95,8 +95,9 @@ export default function Footer() {
                   loading="lazy"
                   decoding="async"
                 />
+                {/* Igual que en el header: la "A" inicial es el logo. */}
                 <span className="footer__brand-name">
-                  Sports<span className="footer__brand-accent">LAB</span>
+                  BrahamSports<span className="footer__brand-accent">Labs</span>
                 </span>
               </a>
               <p className="footer__tagline">{t('footer.tagline')}</p>
