@@ -5,15 +5,19 @@ import Icon from '@components/ui/Icon/Icon.jsx';
 import { TELEGRAM_URL } from '@data/navigation.js';
 import { useLang } from '@/i18n/index.jsx';
 import heroBg from '@assets/images/tennis-hero-1.jpg';
+import bettor1 from '@assets/images/hero1.jpeg';
+import bettor2 from '@assets/images/hero2.jpeg';
+import bettor3 from '@assets/images/hero3.jpeg';
+import bettor4 from '@assets/images/hero4.jpeg';
 import { gsap, useGSAP, prefersReducedMotion } from '@utils/motion.js';
 import './Hero.scss';
 
 // Prueba social del hero: apostadores destacados de la comunidad.
 const BETTORS = [
-  { id: 'b1', name: 'Andrés M.', initials: 'AM' },
-  { id: 'b2', name: 'Camila R.', initials: 'CR' },
-  { id: 'b3', name: 'Julián T.', initials: 'JT' },
-  { id: 'b4', name: 'Valeria O.', initials: 'VO' },
+  { id: 'b1', name: 'Andrés M.', photo: bettor1 },
+  { id: 'b2', name: 'Camila R.', photo: bettor2 },
+  { id: 'b3', name: 'Julián T.', photo: bettor3 },
+  { id: 'b4', name: 'Valeria O.', photo: bettor4 },
 ];
 
 const CARDS = [
@@ -129,9 +133,15 @@ export default function Hero() {
             <div className="hero__avatars">
               {BETTORS.map((bettor, i) => (
                 <span className="hero__avatar" key={bettor.id} data-i={i + 1}>
-                  <span className="hero__avatar-initials" aria-hidden="true">
-                    {bettor.initials}
-                  </span>
+                  <img
+                    className="hero__avatar-photo"
+                    src={bettor.photo}
+                    alt=""
+                    width="640"
+                    height="640"
+                    loading="lazy"
+                    decoding="async"
+                  />
                   <span className="hero__avatar-name">{bettor.name}</span>
                 </span>
               ))}

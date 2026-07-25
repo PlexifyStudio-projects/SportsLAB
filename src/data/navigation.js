@@ -3,6 +3,9 @@
  */
 export const TELEGRAM_URL = 'https://t.me/abrahamsportslab';
 
+/** Perfil de Instagram del fundador. */
+export const INSTAGRAM_URL = 'https://www.instagram.com/_jabrahamb/';
+
 /**
  * Enlaces de navegación principal.
  * `icon` es una clave del registro de iconos SVG (components/ui/Icon).

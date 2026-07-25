@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import LegalModal from '@components/ui/LegalModal/LegalModal.jsx';
-import { TELEGRAM_URL } from '@data/navigation.js';
+import { TELEGRAM_URL, INSTAGRAM_URL } from '@data/navigation.js';
 import { CONTACT_EMAIL, LEGAL } from '@data/legal.js';
 import { useLang } from '@/i18n/index.jsx';
 import logo from '@assets/images/Logo.jpeg';
@@ -44,9 +44,9 @@ const LEGAL_LINKS = ['terms', 'privacy', 'cookies', 'responsible'];
 
 // Se quitó WhatsApp: no había número, y un enlace a wa.me vacío no lleva a
 // ninguna parte.
-// PENDIENTE: Facebook e Instagram apuntan a `#` hasta que el cliente facilite
-// las URLs reales de los perfiles. Al no ser enlaces externos, no llevan
-// `target="_blank"` ni entran en el `sameAs` del JSON-LD.
+// PENDIENTE: Facebook apunta a `#` hasta que el cliente facilite la URL real
+// del perfil. Al no ser un enlace externo, no lleva `target="_blank"` ni entra
+// en el `sameAs` del JSON-LD.
 const SOCIALS = [
   {
     id: 'facebook',
@@ -58,7 +58,7 @@ const SOCIALS = [
   {
     id: 'instagram',
     label: 'Instagram',
-    href: '#',
+    href: INSTAGRAM_URL,
     brand: '#E1306C',
     gradient: true,
     path: 'M8 3h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H8Zm4 3.5A3.5 3.5 0 1 1 8.5 12 3.5 3.5 0 0 1 12 8.5Zm0 2A1.5 1.5 0 1 0 13.5 12 1.5 1.5 0 0 0 12 10.5ZM17 6.3a1.05 1.05 0 1 1-1.05 1.05A1.05 1.05 0 0 1 17 6.3Z',

@@ -14,7 +14,7 @@ import {
 import portrait from '@assets/images/2.jpeg';
 import night from '@assets/images/1.jpeg';
 import patrol from '@assets/images/4.jpeg';
-import drive from '@assets/images/3.jpeg';
+import drive from '@assets/images/16.jpeg';
 import wheel from '@assets/images/5.jpeg';
 
 import './Lifestyle.scss';
