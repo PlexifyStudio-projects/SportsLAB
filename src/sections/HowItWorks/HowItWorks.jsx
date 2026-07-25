@@ -7,14 +7,7 @@ import { HOW_IT_WORKS } from '@data/howItWorks.js';
 import { TELEGRAM_URL } from '@data/navigation.js';
 import { useLang } from '@/i18n/index.jsx';
 import courtBg from '@assets/images/tennis-court-fence.jpg';
-import {
-  gsap,
-  useGSAP,
-  cinematicReveal,
-  parallax,
-  scrollDrift,
-  prefersReducedMotion,
-} from '@utils/motion.js';
+import { gsap, useGSAP, cinematicReveal, parallax, prefersReducedMotion } from '@utils/motion.js';
 import './HowItWorks.scss';
 
 /**
@@ -40,8 +33,8 @@ export default function HowItWorks() {
       // Profundidad de campo: el fondo de pista se mueve más lento que el texto.
       parallax('.how__bg-img', { trigger: rootRef.current, distance: 16, scale: 1.14 });
 
-      // Los cuatro pasos avanzan a distinta velocidad al cruzar la pantalla.
-      scrollDrift('.how__step', { trigger: '.how__timeline', spread: 36 });
+      // Sin `scrollDrift` en los pasos: van alineados con la línea de progreso
+      // horizontal, y desplazarlos en vertical los descuadraba respecto a ella.
 
       // La línea de progreso se "dibuja" según el scroll.
       const mm = gsap.matchMedia();

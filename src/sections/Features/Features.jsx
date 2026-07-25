@@ -4,13 +4,7 @@ import SectionHeader from '@components/ui/SectionHeader/SectionHeader.jsx';
 import Icon from '@components/ui/Icon/Icon.jsx';
 import { FEATURES } from '@data/features.js';
 import { useLang } from '@/i18n/index.jsx';
-import {
-  useGSAP,
-  cinematicReveal,
-  scrollDrift,
-  prefersReducedMotion,
-  rafThrottle,
-} from '@utils/motion.js';
+import { useGSAP, cinematicReveal, prefersReducedMotion, rafThrottle } from '@utils/motion.js';
 import './Features.scss';
 
 // Inclinación 3D + spotlight que siguen al cursor. Limitado a una escritura por
@@ -52,8 +46,8 @@ export default function Features() {
         start: 'top 85%',
       });
 
-      // Las tarjetas se desplazan a distinta velocidad: la rejilla respira.
-      scrollDrift('.features__card', { trigger: '.features__grid', spread: 38 });
+      // Sin `scrollDrift`: igual que en Torneos, son tarjetas iguales en rejilla
+      // y el desfase vertical se ve como desalineación, no como profundidad.
     },
     { scope: rootRef },
   );

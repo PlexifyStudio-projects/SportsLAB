@@ -185,7 +185,7 @@ const dict = {
       cap4Sub: 'Con el control',
       quote:
         '“En la pista y en la vida gana quien estudia el juego. Nosotros te damos las herramientas; las decisiones, con cabeza.”',
-      cite: '— Equipo SportsLAB',
+      cite: '— AbrahamSportsLAB',
     },
     cta: {
       eyebrow: 'Beneficio exclusivo',
@@ -373,7 +373,7 @@ const dict = {
       cap4Sub: 'In full control',
       quote:
         '“On the court and in life, whoever studies the game wins. We give you the tools; the decisions, with a clear head.”',
-      cite: '— The SportsLAB team',
+      cite: '— AbrahamSportsLAB',
     },
     cta: {
       eyebrow: 'Exclusive perk',

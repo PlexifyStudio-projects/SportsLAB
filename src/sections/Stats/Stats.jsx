@@ -2,7 +2,7 @@ import { useRef } from 'react';
 
 import Icon from '@components/ui/Icon/Icon.jsx';
 import { useLang } from '@/i18n/index.jsx';
-import { gsap, useGSAP, scrollDrift, prefersReducedMotion, rafThrottle } from '@utils/motion.js';
+import { gsap, useGSAP, prefersReducedMotion, rafThrottle } from '@utils/motion.js';
 import './Stats.scss';
 
 const STATS = [
@@ -76,9 +76,8 @@ export default function Stats() {
         );
       });
 
-      // Al seguir bajando, las celdas se separan a distinta velocidad: el bento
-      // gana profundidad en vez de desplazarse como un bloque rígido.
-      scrollDrift('.stats__cell', { trigger: '.stats__bento', spread: 42 });
+      // Sin `scrollDrift`: el bento tiene una celda destacada que ocupa 2x2 y
+      // desplazar las demás en vertical rompía la retícula.
     },
     { scope: rootRef },
   );

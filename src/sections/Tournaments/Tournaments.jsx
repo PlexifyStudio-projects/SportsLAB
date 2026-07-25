@@ -5,7 +5,7 @@ import Icon from '@components/ui/Icon/Icon.jsx';
 import { TOURNAMENTS } from '@data/tournaments.js';
 import { useLang } from '@/i18n/index.jsx';
 import courtBg from '@assets/images/tennis-court-night.jpg';
-import { useGSAP, cinematicReveal, parallax, scrollDrift } from '@utils/motion.js';
+import { useGSAP, cinematicReveal, parallax } from '@utils/motion.js';
 import './Tournaments.scss';
 
 /**
@@ -28,9 +28,9 @@ export default function Tournaments() {
 
       parallax('.tournaments__bg-img', { trigger: rootRef.current, distance: 18, scale: 1.16 });
 
-      // Los cinco torneos avanzan a distinta velocidad: la fila deja de leerse
-      // como un bloque rígido y gana profundidad al hacer scroll.
-      scrollDrift('.tournaments__item', { trigger: '.tournaments__grid', spread: 40 });
+      // Sin `scrollDrift` aquí: son cinco tarjetas idénticas en una sola fila y
+      // el desfase vertical no se lee como profundidad, sino como una fila mal
+      // alineada. El efecto solo funciona en collages de piezas desiguales.
     },
     { scope: rootRef },
   );
